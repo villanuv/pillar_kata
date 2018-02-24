@@ -25,7 +25,7 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.coin_return).to eq 0
       end
 
-      it "assigns INSERT COIN to @display" do
+      it "calls #display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
     end
@@ -77,5 +77,28 @@ describe PillarKata::VendingMachine do
       end       
     end
 
+    describe "#display" do
+      it "updates the display when coin deposit is greater than 0.01" do
+        @vending_machine.add_to_total_deposit_or_coin_return(@nickel[:value])
+        expect(@vending_machine.display).to eq "0.05"
+      end
+    end
+
+    describe "#add_coin" do
+      it "combines the previous 3 methods for Accept Coins feature" do
+        @vending_machine.add_coin(@nickel[:weight], @nickel[:diameter])
+        expect(@vending_machine.total_deposit).to eq 0.05
+        expect(@vending_machine.display).to eq "0.05"
+        @vending_machine.add_coin(@dime[:weight], @dime[:diameter])
+        expect(@vending_machine.total_deposit).to eq 0.15
+        expect(@vending_machine.display).to eq "0.15"
+        @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter])
+        expect(@vending_machine.total_deposit).to eq 0.40
+        expect(@vending_machine.display).to eq "0.40"
+        @vending_machine.add_coin(@penny[:weight], @penny[:diameter])
+        expect(@vending_machine.total_deposit).to eq 0.40
+        expect(@vending_machine.coin_return).to eq 0.01
+      end
+    end
   end
 end
