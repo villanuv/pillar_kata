@@ -45,6 +45,10 @@ module PillarKata
       add_to_total_deposit_or_coin_return(coin_value)
       display
     end
+
+    def is_total_deposit_enough_for_product?(product, amount)
+      amount >= product
+    end
   end
 
 end

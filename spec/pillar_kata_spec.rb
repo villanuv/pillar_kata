@@ -101,4 +101,38 @@ describe PillarKata::VendingMachine do
       end
     end
   end
+
+  context "Select Product" do
+    describe "#is_total_deposit_enough_for_product?" do
+      it "returns true for cola with $1.00" do
+        total_deposit = 1.00
+        cola = 1.00
+        expect(@vending_machine.is_total_deposit_enough_for_product?(cola, total_deposit)).to be true
+      end
+
+      it "returns true for chips with $0.50" do
+        total_deposit = 0.50
+        chips = 0.50
+        expect(@vending_machine.is_total_deposit_enough_for_product?(chips, total_deposit)).to be true
+      end
+
+      it "returns true for candy with $0.65" do
+        total_deposit = 0.65
+        candy = 0.65
+        expect(@vending_machine.is_total_deposit_enough_for_product?(candy, total_deposit)).to be true
+      end
+
+      it "returns true for any product with enough money" do
+        total_deposit = 1.00
+        product = 0.65
+        expect(@vending_machine.is_total_deposit_enough_for_product?(product, total_deposit)).to be true
+      end
+
+      it "returns false for any product without enough money" do
+        total_deposit = 0.50
+        product = 0.65
+        expect(@vending_machine.is_total_deposit_enough_for_product?(product, total_deposit)).to be false
+      end
+    end
+  end
 end
