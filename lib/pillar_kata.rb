@@ -4,7 +4,7 @@ module PillarKata
   
   class VendingMachine
     attr_accessor :total_deposit, :coin_return
-
+    
     def initialize
       @total_deposit = 0
       @coin_return = 0
@@ -34,7 +34,7 @@ module PillarKata
 
     def display
       if @total_deposit > 0
-        @display = '%.2f' % @total_deposit
+        '%.2f' % @total_deposit
       else
         "INSERT COIN"
       end
@@ -47,8 +47,16 @@ module PillarKata
     end
 
     def is_total_deposit_enough_for_product?(product, amount)
-      amount >= product
+      amount >= product.price
     end
   end
 
+  class VendingItem
+    attr_accessor :name, :price
+
+    def initialize(name, price)
+      @name = name
+      @price = price
+    end
+  end
 end
