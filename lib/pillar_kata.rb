@@ -51,15 +51,19 @@ module PillarKata
       end
     end
 
+    def show_total_deposit
+      if @total_deposit > 0
+        @display = "#{truncate_decimals_to_two(@total_deposit)}"
+      else
+        @display = "INSERT COIN"
+      end
+    end
+
     def reset_machine_or_show_total_deposit
       if @product_dispensed != nil
         assign_starting_variables
       else
-        if @total_deposit > 0
-          @display = "#{truncate_decimals_to_two(@total_deposit)}"
-        else
-          @display = "INSERT COIN"
-        end
+        show_total_deposit
       end
     end
 
