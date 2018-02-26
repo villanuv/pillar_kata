@@ -3,11 +3,12 @@ require "pillar_kata/version"
 module PillarKata
   
   class VendingMachine
-    attr_accessor :total_deposit, :coin_return
-    
+    attr_accessor :total_deposit, :coin_return, :product_selected
+
     def initialize
       @total_deposit = 0
       @coin_return = 0
+      @product_selected = nil
       display
     end
 
@@ -32,11 +33,13 @@ module PillarKata
       end
     end
 
-    def display
-      if @total_deposit > 0
+    def display(message = "INSERT COIN")
+      if @total_deposit > 0 && @product_selected != nil
+        "PRICE #{'%.2f' % @product_selected.price}"
+      elsif @total_deposit > 0 
         '%.2f' % @total_deposit
       else
-        "INSERT COIN"
+        message
       end
     end
 
@@ -48,6 +51,17 @@ module PillarKata
 
     def is_total_deposit_enough_for_product?(product, amount)
       amount >= product.price
+    end
+
+    def product_button_pressed(product, amount)
+      @product_selected = product
+      if is_total_deposit_enough_for_product?(product, amount)
+        @total_deposit = 0
+        display("THANK YOU")
+      else
+        @total_deposit = amount
+        display
+      end
     end
   end
 

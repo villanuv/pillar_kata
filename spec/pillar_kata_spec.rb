@@ -25,6 +25,10 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.coin_return).to eq 0
       end
 
+      it "assigns nil to @product_selected" do
+        expect(@vending_machine.product_selected).to be_nil
+      end
+
       it "calls #display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
@@ -133,6 +137,29 @@ describe PillarKata::VendingMachine do
       it "returns false for any product without enough money" do
         total_deposit = 0.50
         expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be false
+      end
+    end
+
+    describe "#product_button_pressed" do
+      it "assigns product to @product_selected" do
+        @vending_machine.product_button_pressed(@cola, 1.00)
+        expect(@vending_machine.product_selected).to be_a PillarKata::VendingItem
+      end
+
+      it "combines #display with #is_total_deposit_enough_for_product? and shows thanks if true" do
+        expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
+      end
+
+      it "shows PRICE 1.00 for cola without enough money" do
+        expect(@vending_machine.product_button_pressed(@cola, 0.75)).to eq "PRICE 1.00"
+      end
+
+      it "shows PRICE 0.50 for chips without enough money" do
+        expect(@vending_machine.product_button_pressed(@chips, 0.25)).to eq "PRICE 0.50"
+      end
+
+      it "shows PRICE 0.65 for candy without enough money" do
+        expect(@vending_machine.product_button_pressed(@candy, 0.50)).to eq "PRICE 0.65"
       end
     end
   end
