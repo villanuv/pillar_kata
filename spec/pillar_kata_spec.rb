@@ -9,10 +9,10 @@ end
 describe PillarKata::VendingMachine do
   before do
     @vending_machine = PillarKata::VendingMachine.new
-    @nickel = { weight: 5.000, diameter: 21.21, value: 0.05 }
-    @dime = { weight: 2.268, diameter: 17.91, value: 0.10 }
+    @nickel  = { weight: 5.000, diameter: 21.21, value: 0.05 }
+    @dime    = { weight: 2.268, diameter: 17.91, value: 0.10 }
     @quarter = { weight: 5.670, diameter: 24.26, value: 0.25 }
-    @penny = { weight: 2.500, diameter: 19.05, value: 0.01 }
+    @penny   = { weight: 2.500, diameter: 19.05, value: 0.01 }
   end
 
   context "When customer approaches the machine" do
@@ -25,12 +25,32 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.coin_return).to eq 0
       end
 
-      it "assigns nil to @product_selected" do
-        expect(@vending_machine.product_selected).to be_nil
-      end
-
-      it "calls #display" do
+      it "assigns INSERT COIN to @display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+    end
+
+    describe "#total_deposit" do
+      it "gets and sets @total_deposit" do
+        expect(@vending_machine.total_deposit).to eq 0
+        @vending_machine.total_deposit = 1
+        expect(@vending_machine.total_deposit).to eq 1
+      end
+    end
+
+    describe "#coin_return" do
+      it "gets and sets @coin_return" do
+        expect(@vending_machine.coin_return).to eq 0
+        @vending_machine.coin_return = 0.01
+        expect(@vending_machine.coin_return).to eq 0.01
+      end
+    end
+
+    describe "#display" do
+      it "gets and sets @display" do
+        expect(@vending_machine.display).to eq "INSERT COIN"
+        @vending_machine.display = "THANK YOU"
+        expect(@vending_machine.display).to eq "THANK YOU"
       end
     end
   end
@@ -89,7 +109,7 @@ describe PillarKata::VendingMachine do
     end
 
     describe "#add_coin" do
-      it "combines the previous 3 methods for Accept Coins feature" do
+      it "combines previous methods for Accept Coins feature" do
         @vending_machine.add_coin(@nickel[:weight], @nickel[:diameter])
         expect(@vending_machine.total_deposit).to eq 0.05
         expect(@vending_machine.display).to eq "0.05"
@@ -108,7 +128,7 @@ describe PillarKata::VendingMachine do
 
   context "Select Product" do
     before do
-      @cola = PillarKata::VendingItem.new("cola", 1.00)
+      @cola  = PillarKata::VendingItem.new("cola", 1.00)
       @chips = PillarKata::VendingItem.new("chips", 0.50)
       @candy = PillarKata::VendingItem.new("candy", 0.65)
     end
@@ -141,12 +161,7 @@ describe PillarKata::VendingMachine do
     end
 
     describe "#product_button_pressed" do
-      it "assigns product to @product_selected" do
-        @vending_machine.product_button_pressed(@cola, 1.00)
-        expect(@vending_machine.product_selected).to be_a PillarKata::VendingItem
-      end
-
-      it "combines #display with #is_total_deposit_enough_for_product? and shows thanks if true" do
+      it "displays THANK YOU if #is_total_deposit_enough_for_product? is true" do
         expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
       end
 
@@ -177,6 +192,22 @@ describe PillarKata::VendingItem do
 
     it "assigns price to @price" do
       expect(@cola.price).to eq 1.00
+    end
+  end
+
+  describe "#name" do
+    it "gets and sets @name" do
+      expect(@cola.name).to eq "cola"
+      @cola.name = "coke"
+      expect(@cola.name).to eq "coke"
+    end
+  end
+
+  describe "#price" do
+    it "gets and sets @price" do
+      expect(@cola.price).to eq 1.00
+      @cola.price = 1.25
+      expect(@cola.price).to eq 1.25
     end
   end
 end

@@ -3,13 +3,13 @@ require "pillar_kata/version"
 module PillarKata
   
   class VendingMachine
-    attr_accessor :total_deposit, :coin_return, :product_selected
+    attr_accessor :total_deposit, :coin_return, 
+                  :display
 
     def initialize
       @total_deposit = 0
       @coin_return = 0
-      @product_selected = nil
-      display
+      @display = "INSERT COIN"
     end
 
     def evaluate_coin_by_weight_and_size(weight, diameter)
@@ -28,25 +28,16 @@ module PillarKata
       if value == 0.01
         @coin_return += value
       else
-        unrounded_value = @total_deposit + value
-        @total_deposit = ('%.2f' % unrounded_value).to_f
-      end
-    end
-
-    def display(message = "INSERT COIN")
-      if @total_deposit > 0 && @product_selected != nil
-        "PRICE #{'%.2f' % @product_selected.price}"
-      elsif @total_deposit > 0 
-        '%.2f' % @total_deposit
-      else
-        message
+        unrounded_total_deposit = @total_deposit + value
+        @total_deposit = ('%.2f' % unrounded_total_deposit).to_f
+        @display = "#{@total_deposit}"
       end
     end
 
     def add_coin(weight_in_g, diameter_in_mm)
       coin_value = evaluate_coin_by_weight_and_size(weight_in_g, diameter_in_mm)
       add_to_total_deposit_or_coin_return(coin_value)
-      display
+      @display = '%.2f' % @total_deposit
     end
 
     def is_total_deposit_enough_for_product?(product, amount)
@@ -54,13 +45,10 @@ module PillarKata
     end
 
     def product_button_pressed(product, amount)
-      @product_selected = product
       if is_total_deposit_enough_for_product?(product, amount)
-        @total_deposit = 0
-        display("THANK YOU")
+        @display = "THANK YOU"
       else
-        @total_deposit = amount
-        display
+        @display = "PRICE " + '%.2f' % product.price
       end
     end
   end
