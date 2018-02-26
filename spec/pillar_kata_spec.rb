@@ -17,23 +17,16 @@ describe PillarKata::VendingMachine do
 
   context "When customer approaches the machine" do
     describe "#initialize" do
-      it "assigns 0 to @total_deposit" do
+      it "calls #assign_starting_variables" do
         expect(@vending_machine.total_deposit).to eq 0
-      end
-
-      it "assigns 0 to @coin_return" do
         expect(@vending_machine.coin_return).to eq 0
-      end
-
-      it "assigns nil to @product_dispensed" do
         expect(@vending_machine.product_dispensed).to be_nil
-      end
-
-      it "assigns INSERT COIN to @display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
     end
+  end
 
+  context "attr_accessor methods" do
     describe "#total_deposit" do
       it "gets and sets @total_deposit" do
         expect(@vending_machine.total_deposit).to eq 0
@@ -221,10 +214,31 @@ describe PillarKata::VendingMachine do
   end
 
   context "Private Methods" do
+    describe "#assign_starting_variables", :private do
+      before do
+        @vending_machine.send(:assign_starting_variables)
+      end
+
+      it "assigns 0 to @total_deposit" do
+        expect(@vending_machine.total_deposit).to eq 0
+      end
+
+      it "assigns 0 to @coin_return" do
+        expect(@vending_machine.coin_return).to eq 0
+      end
+
+      it "assigns nil to @product_dispensed" do
+        expect(@vending_machine.product_dispensed).to be_nil
+      end
+
+      it "assigns INSERT COIN to @display" do
+        expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+    end
+
     describe "#truncate_decimals_to_two", :private do
       it "shortens decimals to 2 digits" do
-        vending_machine = PillarKata::VendingMachine.new
-        result = vending_machine.send(:truncate_decimals_to_two, 1.250000001)
+        result = @vending_machine.send(:truncate_decimals_to_two, 1.250000001)
         expect(result).to eq "1.25"
       end
     end

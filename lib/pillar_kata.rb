@@ -7,10 +7,7 @@ module PillarKata
                   :product_dispensed, :display
 
     def initialize
-      @total_deposit = 0
-      @coin_return = 0
-      @product_dispensed = nil
-      @display = "INSERT COIN"
+      assign_starting_variables
     end
 
     def evaluate_coin_by_weight_and_size(weight, diameter)
@@ -56,10 +53,7 @@ module PillarKata
 
     def reset_machine_or_show_total_deposit
       if @product_dispensed != nil
-        @total_deposit = 0
-        @coin_return = 0
-        @product_dispensed = nil
-        @display = "INSERT COIN"
+        assign_starting_variables
       else
         if @total_deposit > 0
           @display = "#{truncate_decimals_to_two(@total_deposit)}"
@@ -71,6 +65,13 @@ module PillarKata
 
 
     private
+
+    def assign_starting_variables
+      @total_deposit = 0
+      @coin_return = 0
+      @product_dispensed = nil
+      @display = "INSERT COIN"
+    end
 
     def truncate_decimals_to_two(float)
       '%.2f' % float
