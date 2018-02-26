@@ -194,6 +194,30 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.product_button_pressed(@candy, 0.50)).to eq "PRICE 0.65"
       end
     end
+
+    describe "#reset_machine_or_show_total_deposit" do
+      it "resets machine if @product_dispensed is not nil" do
+        @vending_machine.product_dispensed = "chips"
+        @vending_machine.reset_machine_or_show_total_deposit
+        expect(@vending_machine.total_deposit).to eq 0
+        expect(@vending_machine.coin_return).to eq 0
+        expect(@vending_machine.product_dispensed).to be_nil
+        expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+
+      it "shows @total_deposit if not enough money" do
+        2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
+        @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
+        @vending_machine.reset_machine_or_show_total_deposit
+        expect(@vending_machine.display).to eq "0.50"
+      end
+
+      it "shows INSERT COIN if no money was added" do
+        @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
+        @vending_machine.reset_machine_or_show_total_deposit
+        expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+    end
   end
 
   context "Private Methods" do

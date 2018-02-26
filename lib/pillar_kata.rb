@@ -54,6 +54,22 @@ module PillarKata
       end
     end
 
+    def reset_machine_or_show_total_deposit
+      if @product_dispensed != nil
+        @total_deposit = 0
+        @coin_return = 0
+        @product_dispensed = nil
+        @display = "INSERT COIN"
+      else
+        if @total_deposit > 0
+          @display = "#{truncate_decimals_to_two(@total_deposit)}"
+        else
+          @display = "INSERT COIN"
+        end
+      end
+    end
+
+
     private
 
     def truncate_decimals_to_two(float)
