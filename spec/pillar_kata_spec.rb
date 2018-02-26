@@ -25,6 +25,10 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.coin_return).to eq 0
       end
 
+      it "assigns nil to @product_dispensed" do
+        expect(@vending_machine.product_dispensed).to be_nil
+      end
+
       it "assigns INSERT COIN to @display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
@@ -43,6 +47,14 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.coin_return).to eq 0
         @vending_machine.coin_return = 0.01
         expect(@vending_machine.coin_return).to eq 0.01
+      end
+    end
+
+    describe "#product_dispensed" do
+      it "gets and sets @product_dispensed" do
+        expect(@vending_machine.product_dispensed).to be_nil
+        @vending_machine.product_dispensed = "cola"
+        expect(@vending_machine.product_dispensed).to eq "cola"
       end
     end
 
@@ -161,6 +173,11 @@ describe PillarKata::VendingMachine do
     end
 
     describe "#product_button_pressed" do
+      it "assigns product.name to @product_dispensed if #is_total_deposit_enough_for_product? is true" do
+        @vending_machine.product_button_pressed(@cola, 1.00)
+        expect(@vending_machine.product_dispensed).to eq "cola"
+      end
+
       it "displays THANK YOU if #is_total_deposit_enough_for_product? is true" do
         expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
       end

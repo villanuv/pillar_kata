@@ -4,11 +4,12 @@ module PillarKata
   
   class VendingMachine
     attr_accessor :total_deposit, :coin_return, 
-                  :display
+                  :product_dispensed, :display
 
     def initialize
       @total_deposit = 0
       @coin_return = 0
+      @product_dispensed = nil
       @display = "INSERT COIN"
     end
 
@@ -46,6 +47,7 @@ module PillarKata
 
     def product_button_pressed(product, amount)
       if is_total_deposit_enough_for_product?(product, amount)
+        @product_dispensed = product.name
         @display = "THANK YOU"
       else
         @display = "PRICE #{truncate_decimals_to_two(product.price)}"
