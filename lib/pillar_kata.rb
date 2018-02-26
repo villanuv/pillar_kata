@@ -29,7 +29,7 @@ module PillarKata
         @coin_return += value
       else
         unrounded_total_deposit = @total_deposit + value
-        @total_deposit = ('%.2f' % unrounded_total_deposit).to_f
+        @total_deposit = truncate_decimals_to_two(unrounded_total_deposit).to_f
         @display = "#{@total_deposit}"
       end
     end
@@ -37,7 +37,7 @@ module PillarKata
     def add_coin(weight_in_g, diameter_in_mm)
       coin_value = evaluate_coin_by_weight_and_size(weight_in_g, diameter_in_mm)
       add_to_total_deposit_or_coin_return(coin_value)
-      @display = '%.2f' % @total_deposit
+      @display = truncate_decimals_to_two(@total_deposit)
     end
 
     def is_total_deposit_enough_for_product?(product, amount)
@@ -48,8 +48,14 @@ module PillarKata
       if is_total_deposit_enough_for_product?(product, amount)
         @display = "THANK YOU"
       else
-        @display = "PRICE " + '%.2f' % product.price
+        @display = "PRICE #{truncate_decimals_to_two(product.price)}"
       end
+    end
+
+    private
+
+    def truncate_decimals_to_two(float)
+      '%.2f' % float
     end
   end
 

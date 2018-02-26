@@ -134,17 +134,17 @@ describe PillarKata::VendingMachine do
     end
 
     describe "#is_total_deposit_enough_for_product?" do
-      it "returns true for cola with $1.00" do
+      it "returns true for cola with 1.00" do
         total_deposit = 1.00
         expect(@vending_machine.is_total_deposit_enough_for_product?(@cola, total_deposit)).to be true
       end
 
-      it "returns true for chips with $0.50" do
+      it "returns true for chips with 0.50" do
         total_deposit = 0.50
         expect(@vending_machine.is_total_deposit_enough_for_product?(@chips, total_deposit)).to be true
       end
 
-      it "returns true for candy with $0.65" do
+      it "returns true for candy with 0.65" do
         total_deposit = 0.65
         expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be true
       end
@@ -178,6 +178,16 @@ describe PillarKata::VendingMachine do
       end
     end
   end
+
+  context "Private Methods" do
+    describe "#truncate_decimals_to_two", :private do
+      it "shortens decimals to 2 digits" do
+        vending_machine = PillarKata::VendingMachine.new
+        result = vending_machine.send(:truncate_decimals_to_two, 1.250000001)
+        expect(result).to eq "1.25"
+      end
+    end
+  end  
 end
 
 describe PillarKata::VendingItem do
