@@ -26,58 +26,58 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.product_dispensed).to be_nil
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
+
+      context "attr_accessor methods" do
+        describe "#total_deposit" do
+          it "gets and sets @total_deposit" do
+            expect(@vending_machine.total_deposit).to eq 0
+            @vending_machine.total_deposit = 1
+            expect(@vending_machine.total_deposit).to eq 1
+          end
+        end
+
+        describe "#coin_return" do
+          it "gets and sets @coin_return" do
+            expect(@vending_machine.coin_return).to eq 0
+            @vending_machine.coin_return = 0.01
+            expect(@vending_machine.coin_return).to eq 0.01
+          end
+        end
+
+        describe "#product_dispensed" do
+          it "gets and sets @product_dispensed" do
+            expect(@vending_machine.product_dispensed).to be_nil
+            @vending_machine.product_dispensed = "cola"
+            expect(@vending_machine.product_dispensed).to eq "cola"
+          end
+        end
+
+        describe "#inventory" do
+          it "gets and sets @inventory" do
+            expect(@vending_machine.inventory[:cola]).to eq 1
+            expect(@vending_machine.inventory[:chips]).to eq 1
+            expect(@vending_machine.inventory[:candy]).to eq 1
+            @vending_machine.inventory[:cola] = 0
+            @vending_machine.inventory[:chips] = 0
+            @vending_machine.inventory[:candy] = 0
+            expect(@vending_machine.inventory[:cola]).to eq 0
+            expect(@vending_machine.inventory[:chips]).to eq 0
+            expect(@vending_machine.inventory[:candy]).to eq 0
+          end
+        end
+
+        describe "#display" do
+          it "gets and sets @display" do
+            expect(@vending_machine.display).to eq "INSERT COIN"
+            @vending_machine.display = "THANK YOU"
+            expect(@vending_machine.display).to eq "THANK YOU"
+          end
+        end
+      end
     end
   end
 
-  context "attr_accessor methods" do
-    describe "#total_deposit" do
-      it "gets and sets @total_deposit" do
-        expect(@vending_machine.total_deposit).to eq 0
-        @vending_machine.total_deposit = 1
-        expect(@vending_machine.total_deposit).to eq 1
-      end
-    end
-
-    describe "#coin_return" do
-      it "gets and sets @coin_return" do
-        expect(@vending_machine.coin_return).to eq 0
-        @vending_machine.coin_return = 0.01
-        expect(@vending_machine.coin_return).to eq 0.01
-      end
-    end
-
-    describe "#product_dispensed" do
-      it "gets and sets @product_dispensed" do
-        expect(@vending_machine.product_dispensed).to be_nil
-        @vending_machine.product_dispensed = "cola"
-        expect(@vending_machine.product_dispensed).to eq "cola"
-      end
-    end
-
-    describe "#inventory" do
-      it "gets and sets @inventory" do
-        expect(@vending_machine.inventory[:cola]).to eq 1
-        expect(@vending_machine.inventory[:chips]).to eq 1
-        expect(@vending_machine.inventory[:candy]).to eq 1
-        @vending_machine.inventory[:cola] = 0
-        @vending_machine.inventory[:chips] = 0
-        @vending_machine.inventory[:candy] = 0
-        expect(@vending_machine.inventory[:cola]).to eq 0
-        expect(@vending_machine.inventory[:chips]).to eq 0
-        expect(@vending_machine.inventory[:candy]).to eq 0
-      end
-    end
-
-    describe "#display" do
-      it "gets and sets @display" do
-        expect(@vending_machine.display).to eq "INSERT COIN"
-        @vending_machine.display = "THANK YOU"
-        expect(@vending_machine.display).to eq "THANK YOU"
-      end
-    end
-  end
-
-  context "Accept Coins" do
+  context "ACCEPT COINS" do
     describe "#evaluate_coin_by_weight_and_size" do
       it "returns 0.05 for a nickel" do
         expect(@vending_machine.evaluate_coin_by_weight_and_size(@nickel[:weight], @nickel[:diameter])).to eq 0.05
@@ -148,7 +148,7 @@ describe PillarKata::VendingMachine do
     end
   end
 
-  context "Select Product" do
+  context "SELECT PRODUCT" do
     describe "#is_total_deposit_enough_for_product?" do
       it "returns true for cola with 1.00" do
         total_deposit = 1.00
@@ -165,86 +165,106 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be true
       end
 
-      it "returns true for any product with more than enough money" do
-        total_deposit = 1.00
-        expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be true
+      context "when more than enough:" do
+        it "returns true for any product" do
+          total_deposit = 1.00
+          expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be true
+        end
       end
 
-      it "returns false for any product without enough money" do
-        total_deposit = 0.50
-        expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be false
+      context "when NOT enough:" do
+        it "returns false for any product" do
+          total_deposit = 0.50
+          expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be false
+        end
       end
     end
 
     describe "#product_button_pressed" do
-      it "assigns product.name to @product_dispensed if #is_total_deposit_enough_for_product? is true" do
-        @vending_machine.product_button_pressed(@cola, 1.00)
-        expect(@vending_machine.product_dispensed).to eq "cola"
-      end
+      context "when product is available, calls #product_available_selected:" do
+        context "when @total_deposit is enough:" do
+          it "assigns product.name to @product_dispensed" do
+            @vending_machine.product_button_pressed(@cola, 1.00)
+            expect(@vending_machine.product_dispensed).to eq "cola"
+          end
 
-      it "calls #check_for_change, assigns @coin_return to value" do
-        @vending_machine.product_button_pressed(@cola, 1.05)
-        expect(@vending_machine.coin_return).to eq 0.05
-      end
+          it "calls #check_for_change, assigns @coin_return to value" do
+            @vending_machine.product_button_pressed(@cola, 1.05)
+            expect(@vending_machine.coin_return).to eq 0.05
+          end
 
-      it "displays THANK YOU if #is_total_deposit_enough_for_product? is true" do
-        expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
-      end
+          it "displays THANK YOU" do
+            expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
+          end
+        end
 
-      it "shows PRICE 1.00 for cola without enough money" do
-        expect(@vending_machine.product_button_pressed(@cola, 0.75)).to eq "PRICE 1.00"
-      end
+        context "when @total_deposit is NOT enough:" do
+          it "shows PRICE 1.00 for cola" do
+            expect(@vending_machine.product_button_pressed(@cola, 0.75)).to eq "PRICE 1.00"
+          end
 
-      it "shows PRICE 0.50 for chips without enough money" do
-        expect(@vending_machine.product_button_pressed(@chips, 0.25)).to eq "PRICE 0.50"
-      end
+          it "shows PRICE 0.50 for chips" do
+            expect(@vending_machine.product_button_pressed(@chips, 0.25)).to eq "PRICE 0.50"
+          end
 
-      it "shows PRICE 0.65 for candy without enough money" do
-        expect(@vending_machine.product_button_pressed(@candy, 0.50)).to eq "PRICE 0.65"
+          it "shows PRICE 0.65 for candy" do
+            expect(@vending_machine.product_button_pressed(@candy, 0.50)).to eq "PRICE 0.65"
+          end
+        end
       end
     end
 
     describe "#reset_machine_or_show_total_deposit" do
-      it "calls #assign_starting_variables, resets machine if @product_dispensed is not nil" do
-        @vending_machine.product_dispensed = "chips"
-        @vending_machine.reset_machine_or_show_total_deposit
-        expect(@vending_machine.total_deposit).to eq 0
-        expect(@vending_machine.coin_return).to eq 0
-        expect(@vending_machine.product_dispensed).to be_nil
-        expect(@vending_machine.display).to eq "INSERT COIN"
+      context "when @product_dispensed:" do
+        it "calls #assign_starting_variables, resets machine" do
+          @vending_machine.product_dispensed = "chips"
+          @vending_machine.reset_machine_or_show_total_deposit
+          expect(@vending_machine.total_deposit).to eq 0
+          expect(@vending_machine.coin_return).to eq 0
+          expect(@vending_machine.product_dispensed).to be_nil
+          expect(@vending_machine.display).to eq "INSERT COIN"
+        end
       end
 
-      it "calls #show_total_deposit, shows @total_deposit if not enough money" do
-        2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
-        @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-        @vending_machine.reset_machine_or_show_total_deposit
-        expect(@vending_machine.display).to eq "0.50"
+      context "when @total_deposit is NOT enough:" do
+        it "calls #show_total_deposit, shows @total_deposit" do
+          2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
+          @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
+          @vending_machine.reset_machine_or_show_total_deposit
+          expect(@vending_machine.display).to eq "0.50"
+        end
       end
 
-      it "calls #show_total_deposit, shows INSERT COIN if no money was added" do
-        @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-        @vending_machine.reset_machine_or_show_total_deposit
-        expect(@vending_machine.display).to eq "INSERT COIN"
+      context "when no @total_deposit:" do
+        it "calls #show_total_deposit, shows INSERT COIN" do
+          @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
+          @vending_machine.reset_machine_or_show_total_deposit
+          expect(@vending_machine.display).to eq "INSERT COIN"
+        end
       end
     end
 
     describe "#show_total_deposit" do
-      it "shows @total_deposit if not enough money" do
-        2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
-        @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-        @vending_machine.reset_machine_or_show_total_deposit
-        expect(@vending_machine.display).to eq "0.50"
+      context "when @total_deposit is NOT enough:" do
+        it "shows @total_deposit" do
+          2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
+          @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
+          @vending_machine.reset_machine_or_show_total_deposit
+          expect(@vending_machine.display).to eq "0.50"
+        end
       end
 
-      it "shows INSERT COIN if no money was added" do
-        @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-        @vending_machine.reset_machine_or_show_total_deposit
-        expect(@vending_machine.display).to eq "INSERT COIN"
+      context "when no @total_deposit:" do
+        it "shows INSERT COIN" do
+          @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
+          @vending_machine.reset_machine_or_show_total_deposit
+          expect(@vending_machine.display).to eq "INSERT COIN"
+        end
       end
     end
   end
 
-  context "Make Change" do
+  context "MAKE CHANGE" do
     describe "#check_for_change" do
       it "subtracts product.price from @total_deposit, assigns to @coin_return" do
         price = 1.00
@@ -255,7 +275,7 @@ describe PillarKata::VendingMachine do
     end
   end
 
-  context "Return Coins" do
+  context "RETURN COINS" do
     describe "#return_button_pressed" do
       it "places @total_deposit into @coin_return" do
         @vending_machine.add_coin(@nickel[:weight], @nickel[:diameter])
@@ -276,12 +296,36 @@ describe PillarKata::VendingMachine do
     end
   end
 
-  context "Sold Out" do
+  context "SOLD OUT" do
+    before do
+      @vending_machine.inventory[:cola] = 0
+    end
+
     describe "#product_button_pressed" do
-      it "displays SOLD OUT if product is out" do
-        @vending_machine.inventory[:cola] = 0
-        @vending_machine.product_button_pressed(@cola, 1.00)
-        expect(@vending_machine.display).to eq "SOLD OUT"
+      context "when product is NOT available:" do
+        it "assigns @total_deposit and displays SOLD OUT" do
+          @vending_machine.product_button_pressed(@cola, 1.00)
+          expect(@vending_machine.total_deposit).to eq 1.00
+          expect(@vending_machine.display).to eq "SOLD OUT"
+        end
+      end
+    end
+
+    describe "#show_total_deposit" do
+      context "when @total_deposit is NOT enough:" do
+        it "shows @total_deposit" do
+          @vending_machine.product_button_pressed(@cola, 1.00)
+          @vending_machine.show_total_deposit
+          expect(@vending_machine.display).to eq "1.00"
+        end
+      end
+
+      context "when no @total_deposit:" do
+        it "shows INSERT COIN" do
+          @vending_machine.product_button_pressed(@cola, 0)
+          @vending_machine.show_total_deposit
+          expect(@vending_machine.display).to eq "INSERT COIN"
+        end
       end
     end
   end
@@ -347,21 +391,23 @@ describe PillarKata::VendingItem do
     it "assigns price to @price" do
       expect(@cola.price).to eq 1.00
     end
-  end
 
-  describe "#name" do
-    it "gets and sets @name" do
-      expect(@cola.name).to eq "cola"
-      @cola.name = "coke"
-      expect(@cola.name).to eq "coke"
-    end
-  end
+    context "attr_accessor methods" do
+      describe "#name" do
+        it "gets and sets @name" do
+          expect(@cola.name).to eq "cola"
+          @cola.name = "coke"
+          expect(@cola.name).to eq "coke"
+        end
+      end
 
-  describe "#price" do
-    it "gets and sets @price" do
-      expect(@cola.price).to eq 1.00
-      @cola.price = 1.25
-      expect(@cola.price).to eq 1.25
+      describe "#price" do
+        it "gets and sets @price" do
+          expect(@cola.price).to eq 1.00
+          @cola.price = 1.25
+          expect(@cola.price).to eq 1.25
+        end
+      end
     end
   end
 end

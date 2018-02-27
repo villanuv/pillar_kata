@@ -58,6 +58,7 @@ module PillarKata
 
     def product_button_pressed(product, amount)
       if @inventory[product.name.to_sym] == 0
+        @total_deposit = amount
         @display = "SOLD OUT"
       else
         product_available_selected(product, amount)
