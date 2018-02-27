@@ -54,6 +54,20 @@ describe PillarKata::VendingMachine do
       end
     end
 
+    describe "#inventory" do
+      it "gets and sets @inventory" do
+        expect(@vending_machine.inventory[:cola]).to eq 1
+        expect(@vending_machine.inventory[:chips]).to eq 1
+        expect(@vending_machine.inventory[:candy]).to eq 1
+        @vending_machine.inventory[:cola] = 0
+        @vending_machine.inventory[:chips] = 0
+        @vending_machine.inventory[:candy] = 0
+        expect(@vending_machine.inventory[:cola]).to eq 0
+        expect(@vending_machine.inventory[:chips]).to eq 0
+        expect(@vending_machine.inventory[:candy]).to eq 0
+      end
+    end
+
     describe "#display" do
       it "gets and sets @display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
@@ -262,6 +276,9 @@ describe PillarKata::VendingMachine do
     end
   end
 
+  context "Sold Out" do
+  end
+
   context "Private Methods" do
     describe "#assign_starting_variables", :private do
       before do
@@ -278,6 +295,13 @@ describe PillarKata::VendingMachine do
 
       it "assigns nil to @product_dispensed" do
         expect(@vending_machine.product_dispensed).to be_nil
+      end
+
+      it "assigns a default hash to @inventory" do
+        expect(@vending_machine.inventory).to be_a Hash
+        expect(@vending_machine.inventory[:cola]).to eq 1
+        expect(@vending_machine.inventory[:chips]).to eq 1
+        expect(@vending_machine.inventory[:candy]).to eq 1
       end
 
       it "assigns INSERT COIN to @display" do
