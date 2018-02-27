@@ -72,6 +72,10 @@ module PillarKata
       end
     end
 
+    def return_button_pressed      
+      @coin_return = truncate_decimals_to_two(@coin_return += @total_deposit).to_f
+    end
+
 
     private
 

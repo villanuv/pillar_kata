@@ -241,6 +241,27 @@ describe PillarKata::VendingMachine do
     end
   end
 
+  context "Return Coins" do
+    describe "#return_button_pressed" do
+      it "places @total_deposit into @coin_return" do
+        @vending_machine.add_coin(@nickel[:weight], @nickel[:diameter])
+        @vending_machine.add_coin(@dime[:weight], @dime[:diameter])
+        @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter])
+        @vending_machine.return_button_pressed
+        expect(@vending_machine.coin_return).to eq 0.40
+      end
+
+      it "accommodates pennies in @coin_return total" do
+        @vending_machine.add_coin(@nickel[:weight], @nickel[:diameter])
+        @vending_machine.add_coin(@dime[:weight], @dime[:diameter])
+        @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter])
+        @vending_machine.add_coin(@penny[:weight], @penny[:diameter])
+        @vending_machine.return_button_pressed
+        expect(@vending_machine.coin_return).to eq 0.41
+      end
+    end
+  end
+
   context "Private Methods" do
     describe "#assign_starting_variables", :private do
       before do
