@@ -303,8 +303,9 @@ describe PillarKata::VendingMachine do
 
     describe "#product_button_pressed" do
       context "when product is NOT available:" do
-        it "assigns @total_deposit and displays SOLD OUT" do
-          @vending_machine.product_button_pressed(@cola, 1.00)
+        it "displays SOLD OUT" do
+          4.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
+          @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
           expect(@vending_machine.total_deposit).to eq 1.00
           expect(@vending_machine.display).to eq "SOLD OUT"
         end
@@ -314,7 +315,8 @@ describe PillarKata::VendingMachine do
     describe "#show_total_deposit" do
       context "when @total_deposit is NOT enough:" do
         it "shows @total_deposit" do
-          @vending_machine.product_button_pressed(@cola, 1.00)
+          4.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
+          @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
           @vending_machine.show_total_deposit
           expect(@vending_machine.display).to eq "1.00"
         end
@@ -332,10 +334,6 @@ describe PillarKata::VendingMachine do
 
   context "Private Methods" do
     describe "#assign_starting_variables", :private do
-      before do
-        @vending_machine.send(:assign_starting_variables)
-      end
-
       it "assigns 0 to @total_deposit" do
         expect(@vending_machine.total_deposit).to eq 0
       end
