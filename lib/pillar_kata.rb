@@ -46,17 +46,21 @@ module PillarKata
       @coin_return = convert_decimalstring_to_float(deposit - product_price)
     end
 
+    def product_available_selected(product, amount)
+      if is_total_deposit_enough_for_product?(product, amount)
+        @product_dispensed = product.name
+        check_for_change(amount, product.price)
+        @display = "THANK YOU"
+      else
+        @display = "PRICE " + truncate_decimals_to_two(product.price)
+      end
+    end
+
     def product_button_pressed(product, amount)
       if @inventory[product.name.to_sym] == 0
         @display = "SOLD OUT"
       else
-        if is_total_deposit_enough_for_product?(product, amount)
-          @product_dispensed = product.name
-          check_for_change(amount, product.price)
-          @display = "THANK YOU"
-        else
-          @display = "PRICE " + truncate_decimals_to_two(product.price)
-        end
+        product_available_selected(product, amount)
       end
     end
 
