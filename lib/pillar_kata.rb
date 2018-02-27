@@ -84,6 +84,11 @@ module PillarKata
       @coin_return = convert_decimalstring_to_float(@coin_return += @total_deposit)
     end
 
+    def activate_exact_change
+      @exact_change_only = true
+      @display = "EXACT CHANGE ONLY"
+    end
+
 
     private
 
