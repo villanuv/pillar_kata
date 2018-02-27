@@ -277,6 +277,13 @@ describe PillarKata::VendingMachine do
   end
 
   context "Sold Out" do
+    describe "#product_button_pressed" do
+      it "displays SOLD OUT if product is out" do
+        @vending_machine.inventory[:cola] = 0
+        @vending_machine.product_button_pressed(@cola, 1.00)
+        expect(@vending_machine.display).to eq "SOLD OUT"
+      end
+    end
   end
 
   context "Private Methods" do
