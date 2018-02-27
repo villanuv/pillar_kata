@@ -52,13 +52,13 @@ module PillarKata
         check_for_change(amount, product.price)
         @display = "THANK YOU"
       else
-        @display = "PRICE #{truncate_decimals_to_two(product.price)}"
+        @display = "PRICE " + truncate_decimals_to_two(product.price)
       end
     end
 
     def show_total_deposit
       if @total_deposit > 0
-        @display = "#{truncate_decimals_to_two(@total_deposit)}"
+        @display = truncate_decimals_to_two(@total_deposit)
       else
         @display = "INSERT COIN"
       end
