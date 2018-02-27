@@ -3,8 +3,8 @@ require "pillar_kata/version"
 module PillarKata
   
   class VendingMachine
-    attr_accessor :total_deposit, :coin_return, 
-                  :product_dispensed, :inventory, :display
+    attr_accessor :total_deposit, :coin_return, :product_dispensed, 
+                  :inventory, :exact_change_only, :display
 
     def initialize
       assign_starting_variables
@@ -92,6 +92,7 @@ module PillarKata
       @coin_return = 0
       @product_dispensed = nil
       @inventory = { cola: 1, chips: 1, candy: 1 }
+      @exact_change_only = false
       @display = "INSERT COIN"
     end
 

@@ -66,6 +66,14 @@ describe PillarKata::VendingMachine do
           end
         end
 
+        describe "#exact_change_only" do
+          it "gets and sets @exact_change_only" do
+            expect(@vending_machine.exact_change_only).to eq false
+            @vending_machine.exact_change_only = true
+            expect(@vending_machine.exact_change_only).to eq true
+          end
+        end        
+
         describe "#display" do
           it "gets and sets @display" do
             expect(@vending_machine.display).to eq "INSERT COIN"
@@ -351,6 +359,10 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.inventory[:cola]).to eq 1
         expect(@vending_machine.inventory[:chips]).to eq 1
         expect(@vending_machine.inventory[:candy]).to eq 1
+      end
+
+      it "assigns false to @exact_change_only" do
+        expect(@vending_machine.exact_change_only).to eq false
       end
 
       it "assigns INSERT COIN to @display" do
