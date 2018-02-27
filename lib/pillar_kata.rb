@@ -42,9 +42,14 @@ module PillarKata
       amount >= product.price
     end
 
+    def check_for_change(deposit, product_price)
+      @coin_return = truncate_decimals_to_two(deposit - product_price).to_f
+    end
+
     def product_button_pressed(product, amount)
       if is_total_deposit_enough_for_product?(product, amount)
         @product_dispensed = product.name
+        check_for_change(amount, product.price)
         @display = "THANK YOU"
       else
         @display = "PRICE #{truncate_decimals_to_two(product.price)}"

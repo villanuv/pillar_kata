@@ -13,6 +13,9 @@ describe PillarKata::VendingMachine do
     @dime    = { weight: 2.268, diameter: 17.91, value: 0.10 }
     @quarter = { weight: 5.670, diameter: 24.26, value: 0.25 }
     @penny   = { weight: 2.500, diameter: 19.05, value: 0.01 }
+    @cola    = PillarKata::VendingItem.new("cola", 1.00)
+    @chips   = PillarKata::VendingItem.new("chips", 0.50)
+    @candy   = PillarKata::VendingItem.new("candy", 0.65)
   end
 
   context "When customer approaches the machine" do
@@ -132,12 +135,6 @@ describe PillarKata::VendingMachine do
   end
 
   context "Select Product" do
-    before do
-      @cola  = PillarKata::VendingItem.new("cola", 1.00)
-      @chips = PillarKata::VendingItem.new("chips", 0.50)
-      @candy = PillarKata::VendingItem.new("candy", 0.65)
-    end
-
     describe "#is_total_deposit_enough_for_product?" do
       it "returns true for cola with 1.00" do
         total_deposit = 1.00
@@ -169,6 +166,11 @@ describe PillarKata::VendingMachine do
       it "assigns product.name to @product_dispensed if #is_total_deposit_enough_for_product? is true" do
         @vending_machine.product_button_pressed(@cola, 1.00)
         expect(@vending_machine.product_dispensed).to eq "cola"
+      end
+
+      it "calls #check_for_change, assigns @coin_return to value" do
+        @vending_machine.product_button_pressed(@cola, 1.05)
+        expect(@vending_machine.coin_return).to eq 0.05
       end
 
       it "displays THANK YOU if #is_total_deposit_enough_for_product? is true" do
@@ -224,6 +226,17 @@ describe PillarKata::VendingMachine do
         @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
         @vending_machine.reset_machine_or_show_total_deposit
         expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+    end
+  end
+
+  context "Make Change" do
+    describe "#check_for_change" do
+      it "subtracts product.price from @total_deposit, assigns to @coin_return" do
+        price = 1.00
+        total_deposit = 1.05
+        @vending_machine.check_for_change(total_deposit, price)
+        expect(@vending_machine.coin_return).to eq 0.05
       end
     end
   end
