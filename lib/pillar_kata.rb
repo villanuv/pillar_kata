@@ -68,7 +68,7 @@ module PillarKata
       if @total_deposit > 0
         @display = truncate_decimals_to_two(@total_deposit)
       else
-        @display = "INSERT COIN"
+        @display = show_insert_coin_or_exact_change_only
       end
     end
 
@@ -86,11 +86,15 @@ module PillarKata
 
     def activate_exact_change
       @exact_change_only = true
-      @display = "EXACT CHANGE ONLY"
+      @display = show_insert_coin_or_exact_change_only
     end
 
 
     private
+
+    def show_insert_coin_or_exact_change_only
+      @exact_change_only ? "EXACT CHANGE ONLY" : "INSERT COIN"
+    end
 
     def assign_starting_variables
       @total_deposit = 0
@@ -98,7 +102,7 @@ module PillarKata
       @product_dispensed = nil
       @inventory = { cola: 1, chips: 1, candy: 1 }
       @exact_change_only = false
-      @display = "INSERT COIN"
+      @display = show_insert_coin_or_exact_change_only
     end
 
     def truncate_decimals_to_two(float)

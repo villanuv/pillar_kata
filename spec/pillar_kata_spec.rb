@@ -341,11 +341,11 @@ describe PillarKata::VendingMachine do
   end
 
   context "EXACT CHANGE ONLY" do
-    before do
-      @vending_machine.activate_exact_change
-    end
-
     describe "#activate_exact_change" do
+      before do
+        @vending_machine.activate_exact_change
+      end
+
       it "assigns true to @exact_change_only" do
         expect(@vending_machine.exact_change_only).to eq true
       end
@@ -357,6 +357,23 @@ describe PillarKata::VendingMachine do
   end
 
   context "Private Methods" do
+    describe "#show_insert_coin_or_exact_change_only", :private do
+      context "when @exact_change_only is true:" do
+        it "shows EXACT CHANGE ONLY" do
+          @vending_machine.exact_change_only = true
+          message = @vending_machine.send(:show_insert_coin_or_exact_change_only)
+          expect(message).to eq "EXACT CHANGE ONLY"
+        end
+      end
+
+      context "when @exact_change_only is false:" do
+        it "shows INSERT COIN" do
+          message = @vending_machine.send(:show_insert_coin_or_exact_change_only)
+          expect(message).to eq "INSERT COIN"
+        end
+      end
+    end
+
     describe "#assign_starting_variables", :private do
       it "assigns 0 to @total_deposit" do
         expect(@vending_machine.total_deposit).to eq 0
