@@ -66,7 +66,7 @@ module PillarKata
       end
     end
 
-    def reset_machine_or_show_total_deposit
+    def reset_or_show_total_or_message
       if @product_dispensed != nil
         assign_starting_variables
       else

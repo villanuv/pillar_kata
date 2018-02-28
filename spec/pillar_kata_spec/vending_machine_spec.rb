@@ -185,11 +185,11 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#reset_machine_or_show_total_deposit" do
+    describe "#reset_or_show_total_or_message" do
       context "when @product_dispensed:" do
         it "calls #assign_starting_variables, resets machine" do
           @vending_machine.product_dispensed = "chips"
-          @vending_machine.reset_machine_or_show_total_deposit
+          @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.total_deposit).to eq 0
           expect(@vending_machine.coin_return).to eq 0
           expect(@vending_machine.product_dispensed).to be_nil
@@ -203,7 +203,7 @@ describe PillarKata::VendingMachine do
         it "calls #show_total_deposit_or_initial_message, shows @total_deposit" do
           2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-          @vending_machine.reset_machine_or_show_total_deposit
+          @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "0.50"
         end
       end
@@ -211,7 +211,7 @@ describe PillarKata::VendingMachine do
       context "when no @total_deposit:" do
         it "calls #show_total_deposit_or_initial_message, shows INSERT COIN" do
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-          @vending_machine.reset_machine_or_show_total_deposit
+          @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
       end
@@ -222,7 +222,7 @@ describe PillarKata::VendingMachine do
         it "shows @total_deposit" do
           2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-          @vending_machine.reset_machine_or_show_total_deposit
+          @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "0.50"
         end
       end
@@ -230,7 +230,7 @@ describe PillarKata::VendingMachine do
       context "when no @total_deposit:" do
         it "shows INSERT COIN" do
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
-          @vending_machine.reset_machine_or_show_total_deposit
+          @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
       end
