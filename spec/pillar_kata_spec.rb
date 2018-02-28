@@ -375,6 +375,26 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
       end
     end
+
+    describe "#product_button_pressed" do
+      context "when product is available, calls #product_available_selected:" do
+        context "when @total_deposit is enough:" do
+          it "assigns product.name to @product_dispensed" do
+            @vending_machine.product_button_pressed(@cola, 1.00)
+            expect(@vending_machine.product_dispensed).to eq "cola"
+          end
+
+          it "does NOT call #check_for_change, @coin_return remains 0" do
+            @vending_machine.product_button_pressed(@cola, 1.05)
+            expect(@vending_machine.coin_return).to eq 0
+          end
+
+          it "displays THANK YOU" do
+            expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
+          end
+        end
+      end
+    end
   end
 
   context "Private Methods" do

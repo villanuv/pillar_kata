@@ -49,7 +49,7 @@ module PillarKata
     def product_available_selected(product, amount)
       if is_total_deposit_enough_for_product?(product, amount)
         @product_dispensed = product.name
-        check_for_change(amount, product.price)
+        check_for_change(amount, product.price) unless @exact_change_only
         @display = "THANK YOU"
       else
         @display = "PRICE " + truncate_decimals_to_two(product.price)
