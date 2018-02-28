@@ -325,7 +325,7 @@ describe PillarKata::VendingMachine do
     end
 
     describe "#show_total_deposit" do
-      context "when @total_deposit is NOT enough:" do
+      context "when @total_deposit is enough:" do
         it "shows @total_deposit" do
           4.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
@@ -334,9 +334,19 @@ describe PillarKata::VendingMachine do
         end
       end
 
+      context "when @total_deposit is NOT enough:" do
+        it "shows @total_deposit" do
+          3.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
+          @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
+          @vending_machine.show_total_deposit
+          expect(@vending_machine.display).to eq "0.75"
+        end
+      end
+
       context "when no @total_deposit:" do
         it "shows INSERT COIN" do
-          @vending_machine.product_button_pressed(@cola, 0)
+          expect(@vending_machine.total_deposit).to eq 0
+          @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
           @vending_machine.show_total_deposit
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
@@ -345,16 +355,23 @@ describe PillarKata::VendingMachine do
   end
 
   context "EXACT CHANGE ONLY" do
-    describe "#activate_exact_change" do
-      before do
-        @vending_machine.activate_exact_change
-      end
+    before do
+      @vending_machine.activate_exact_change
+    end
 
+    describe "#activate_exact_change" do
       it "assigns true to @exact_change_only" do
         expect(@vending_machine.exact_change_only).to eq true
       end
 
       it "shows EXACT CHANGE ONLY" do
+        expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
+      end
+    end
+
+    describe "#show_total_deposit" do
+      it "shows EXACT CHANGE ONLY" do
+        @vending_machine.show_total_deposit
         expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
       end
     end
