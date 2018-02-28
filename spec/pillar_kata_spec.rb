@@ -159,37 +159,6 @@ describe PillarKata::VendingMachine do
   end
 
   context "SELECT PRODUCT" do
-    describe "#is_total_deposit_enough_for_product?" do
-      it "returns true for cola with 1.00" do
-        total_deposit = 1.00
-        expect(@vending_machine.is_total_deposit_enough_for_product?(@cola, total_deposit)).to be true
-      end
-
-      it "returns true for chips with 0.50" do
-        total_deposit = 0.50
-        expect(@vending_machine.is_total_deposit_enough_for_product?(@chips, total_deposit)).to be true
-      end
-
-      it "returns true for candy with 0.65" do
-        total_deposit = 0.65
-        expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be true
-      end
-
-      context "when more than enough:" do
-        it "returns true for any product" do
-          total_deposit = 1.00
-          expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be true
-        end
-      end
-
-      context "when NOT enough:" do
-        it "returns false for any product" do
-          total_deposit = 0.50
-          expect(@vending_machine.is_total_deposit_enough_for_product?(@candy, total_deposit)).to be false
-        end
-      end
-    end
-
     describe "#product_button_pressed" do
       context "when product is available, calls #product_available_selected:" do
         context "when @total_deposit is enough:" do
@@ -398,23 +367,6 @@ describe PillarKata::VendingMachine do
   end
 
   context "Private Methods" do
-    describe "#show_insert_coin_or_exact_change_only", :private do
-      context "when @exact_change_only is true:" do
-        it "shows EXACT CHANGE ONLY" do
-          @vending_machine.exact_change_only = true
-          message = @vending_machine.send(:show_insert_coin_or_exact_change_only)
-          expect(message).to eq "EXACT CHANGE ONLY"
-        end
-      end
-
-      context "when @exact_change_only is false:" do
-        it "shows INSERT COIN" do
-          message = @vending_machine.send(:show_insert_coin_or_exact_change_only)
-          expect(message).to eq "INSERT COIN"
-        end
-      end
-    end
-
     describe "#assign_starting_variables", :private do
       it "assigns 0 to @total_deposit" do
         expect(@vending_machine.total_deposit).to eq 0
@@ -441,6 +393,52 @@ describe PillarKata::VendingMachine do
 
       it "assigns INSERT COIN to @display" do
         expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+    end
+
+    describe "#show_insert_coin_or_exact_change_only", :private do
+      context "when @exact_change_only is true:" do
+        it "shows EXACT CHANGE ONLY" do
+          @vending_machine.exact_change_only = true
+          expect(@vending_machine.send(:show_insert_coin_or_exact_change_only)).to eq "EXACT CHANGE ONLY"
+        end
+      end
+
+      context "when @exact_change_only is false:" do
+        it "shows INSERT COIN" do
+          expect(@vending_machine.send(:show_insert_coin_or_exact_change_only)).to eq "INSERT COIN"
+        end
+      end
+    end
+
+    describe "#is_total_deposit_enough_for_product?", :private do
+      it "returns true for cola with 1.00" do
+        total_deposit = 1.00
+        expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @cola, total_deposit)).to be true
+      end
+
+      it "returns true for chips with 0.50" do
+        total_deposit = 0.50
+        expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @chips, total_deposit)).to be true
+      end
+
+      it "returns true for candy with 0.65" do
+        total_deposit = 0.65
+        expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, total_deposit)).to be true
+      end
+
+      context "when more than enough:" do
+        it "returns true for any product" do
+          total_deposit = 1.00
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, total_deposit)).to be true
+        end
+      end
+
+      context "when NOT enough:" do
+        it "returns false for any product" do
+          total_deposit = 0.50
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, total_deposit)).to be false
+        end
       end
     end
 

@@ -38,10 +38,6 @@ module PillarKata
       @display = truncate_decimals_to_two(@total_deposit)
     end
 
-    def is_total_deposit_enough_for_product?(product, amount)
-      amount >= product.price
-    end
-
     def check_for_change(deposit, product_price)
       @coin_return = convert_decimalstring_to_float(deposit - product_price)
     end
@@ -92,10 +88,6 @@ module PillarKata
 
     private
 
-    def show_insert_coin_or_exact_change_only
-      @exact_change_only ? "EXACT CHANGE ONLY" : "INSERT COIN"
-    end
-
     def assign_starting_variables
       @total_deposit = 0
       @coin_return = 0
@@ -103,6 +95,14 @@ module PillarKata
       @inventory = { cola: 1, chips: 1, candy: 1 }
       @exact_change_only = false
       @display = show_insert_coin_or_exact_change_only
+    end
+
+    def show_insert_coin_or_exact_change_only
+      @exact_change_only ? "EXACT CHANGE ONLY" : "INSERT COIN"
+    end
+
+    def is_total_deposit_enough_for_product?(product, amount)
+      amount >= product.price
     end
 
     def truncate_decimals_to_two(float)
