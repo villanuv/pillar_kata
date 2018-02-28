@@ -247,7 +247,7 @@ describe PillarKata::VendingMachine do
 
   context "MAKE CHANGE" do
     describe "#check_for_change" do
-      it "subtracts product.price from @total_deposit, assigns to @coin_return" do
+      it "assigns @coin_return to @total_deposit-product.price" do
         price = 1.00
         total_deposit = 1.05
         @vending_machine.check_for_change(total_deposit, price)
@@ -406,6 +406,7 @@ describe PillarKata::VendingMachine do
 
       context "when @exact_change_only is false:" do
         it "shows INSERT COIN" do
+          expect(@vending_machine.exact_change_only).to eq false
           expect(@vending_machine.send(:show_insert_coin_or_exact_change_only)).to eq "INSERT COIN"
         end
       end
