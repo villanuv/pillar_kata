@@ -388,18 +388,18 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#show_insert_coin_or_exact_change_only", :private do
+    describe "#choose_initial_message", :private do
       context "when @exact_change_only is true:" do
         it "shows EXACT CHANGE ONLY" do
           @vending_machine.exact_change_only = true
-          expect(@vending_machine.send(:show_insert_coin_or_exact_change_only)).to eq "EXACT CHANGE ONLY"
+          expect(@vending_machine.send(:choose_initial_message)).to eq "EXACT CHANGE ONLY"
         end
       end
 
       context "when @exact_change_only is false:" do
         it "shows INSERT COIN" do
           expect(@vending_machine.exact_change_only).to eq false
-          expect(@vending_machine.send(:show_insert_coin_or_exact_change_only)).to eq "INSERT COIN"
+          expect(@vending_machine.send(:choose_initial_message)).to eq "INSERT COIN"
         end
       end
     end

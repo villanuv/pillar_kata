@@ -62,7 +62,7 @@ module PillarKata
       if @total_deposit > 0
         @display = truncate_decimals_to_two(@total_deposit)
       else
-        @display = show_insert_coin_or_exact_change_only
+        @display = choose_initial_message
       end
     end
 
@@ -80,7 +80,7 @@ module PillarKata
 
     def activate_exact_change
       @exact_change_only = true
-      @display = show_insert_coin_or_exact_change_only
+      @display = choose_initial_message
     end
 
 
@@ -92,10 +92,10 @@ module PillarKata
       @product_dispensed = nil
       @inventory = { cola: 1, chips: 1, candy: 1 }
       @exact_change_only = false
-      @display = show_insert_coin_or_exact_change_only
+      @display = choose_initial_message
     end
 
-    def show_insert_coin_or_exact_change_only
+    def choose_initial_message
       @exact_change_only ? "EXACT CHANGE ONLY" : "INSERT COIN"
     end
 
