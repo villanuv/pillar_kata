@@ -58,7 +58,7 @@ module PillarKata
       end
     end
 
-    def show_total_deposit
+    def show_total_deposit_or_initial_message
       if @total_deposit > 0
         @display = truncate_decimals_to_two(@total_deposit)
       else
@@ -70,7 +70,7 @@ module PillarKata
       if @product_dispensed != nil
         assign_starting_variables
       else
-        show_total_deposit
+        show_total_deposit_or_initial_message
       end
     end
 

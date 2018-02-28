@@ -200,7 +200,7 @@ describe PillarKata::VendingMachine do
       end
 
       context "when @total_deposit is NOT enough:" do
-        it "calls #show_total_deposit, shows @total_deposit" do
+        it "calls #show_total_deposit_or_initial_message, shows @total_deposit" do
           2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
           @vending_machine.reset_machine_or_show_total_deposit
@@ -209,7 +209,7 @@ describe PillarKata::VendingMachine do
       end
 
       context "when no @total_deposit:" do
-        it "calls #show_total_deposit, shows INSERT COIN" do
+        it "calls #show_total_deposit_or_initial_message, shows INSERT COIN" do
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
           @vending_machine.reset_machine_or_show_total_deposit
           expect(@vending_machine.display).to eq "INSERT COIN"
@@ -217,7 +217,7 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#show_total_deposit" do
+    describe "#show_total_deposit_or_initial_message" do
       context "when @total_deposit is NOT enough:" do
         it "shows @total_deposit" do
           2.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
@@ -285,12 +285,12 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#show_total_deposit" do
+    describe "#show_total_deposit_or_initial_message" do
       context "when @total_deposit is enough:" do
         it "shows @total_deposit" do
           4.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
-          @vending_machine.show_total_deposit
+          @vending_machine.show_total_deposit_or_initial_message
           expect(@vending_machine.display).to eq "1.00"
         end
       end
@@ -299,7 +299,7 @@ describe PillarKata::VendingMachine do
         it "shows @total_deposit" do
           3.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
-          @vending_machine.show_total_deposit
+          @vending_machine.show_total_deposit_or_initial_message
           expect(@vending_machine.display).to eq "0.75"
         end
       end
@@ -308,7 +308,7 @@ describe PillarKata::VendingMachine do
         it "shows INSERT COIN" do
           expect(@vending_machine.total_deposit).to eq 0
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
-          @vending_machine.show_total_deposit
+          @vending_machine.show_total_deposit_or_initial_message
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
       end
@@ -330,9 +330,9 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#show_total_deposit" do
+    describe "#show_total_deposit_or_initial_message" do
       it "shows EXACT CHANGE ONLY" do
-        @vending_machine.show_total_deposit
+        @vending_machine.show_total_deposit_or_initial_message
         expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
       end
     end
