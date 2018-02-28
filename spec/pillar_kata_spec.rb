@@ -24,6 +24,8 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.total_deposit).to eq 0
         expect(@vending_machine.coin_return).to eq 0
         expect(@vending_machine.product_dispensed).to be_nil
+        expect(@vending_machine.inventory).to be_a Hash
+        expect(@vending_machine.exact_change_only).to eq false
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
 
@@ -230,6 +232,8 @@ describe PillarKata::VendingMachine do
           expect(@vending_machine.total_deposit).to eq 0
           expect(@vending_machine.coin_return).to eq 0
           expect(@vending_machine.product_dispensed).to be_nil
+          expect(@vending_machine.inventory).to be_a Hash
+          expect(@vending_machine.exact_change_only).to eq false
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
       end
