@@ -109,11 +109,7 @@ module PillarKata
 
     def safe_box_amount_changes(amount)
       @safe_box_amount = amount
-      if @safe_box_amount < 0.10
-        @exact_change_only = true
-      else
-        @exact_change_only = false
-      end
+      @safe_box_amount < 0.10 ? @exact_change_only = true : @exact_change_only = false
     end
   end
 
