@@ -2,7 +2,7 @@ module PillarKata
   
   class VendingMachine
     attr_accessor :total_deposit, :coin_return, :product_dispensed, 
-                  :inventory, :exact_change_only, :display
+                  :inventory, :safe_box_amount, :exact_change_only, :display
 
     def initialize
       assign_starting_variables
@@ -78,11 +78,6 @@ module PillarKata
       @coin_return = convert_decimalstring_to_float(@coin_return += @total_deposit)
     end
 
-    def activate_exact_change
-      @exact_change_only = true
-      @display = choose_initial_message
-    end
-
 
     private
 
@@ -91,6 +86,7 @@ module PillarKata
       @coin_return = 0
       @product_dispensed = nil
       @inventory = { cola: 1, chips: 1, candy: 1 }
+      @safe_box_amount = 0.10
       @exact_change_only = false
       @display = choose_initial_message
     end
@@ -109,6 +105,15 @@ module PillarKata
 
     def convert_decimalstring_to_float(float)
       truncate_decimals_to_two(float).to_f
+    end
+
+    def safe_box_amount_changes(amount)
+      @safe_box_amount = amount
+      if @safe_box_amount < 0.10
+        @exact_change_only = true
+      else
+        @exact_change_only = false
+      end
     end
   end
 

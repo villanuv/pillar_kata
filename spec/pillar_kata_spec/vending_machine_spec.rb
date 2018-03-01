@@ -17,6 +17,7 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.coin_return).to eq 0
         expect(@vending_machine.product_dispensed).to be_nil
         expect(@vending_machine.inventory).to be_a Hash
+        expect(@vending_machine.safe_box_amount).to eq 0.10
         expect(@vending_machine.exact_change_only).to eq false
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
@@ -57,6 +58,14 @@ describe PillarKata::VendingMachine do
             expect(@vending_machine.inventory[:cola]).to eq 0
             expect(@vending_machine.inventory[:chips]).to eq 0
             expect(@vending_machine.inventory[:candy]).to eq 0
+          end
+        end
+
+        describe "#safe_box_amount" do
+          it "gets and sets @safe_box_amount" do
+            expect(@vending_machine.safe_box_amount).to eq 0.10
+            @vending_machine.safe_box_amount = 0.20
+          expect(@vending_machine.safe_box_amount).to eq 0.20
           end
         end
 
@@ -209,7 +218,7 @@ describe PillarKata::VendingMachine do
       end
 
       context "when no @total_deposit:" do
-        it "calls #show_total_deposit_or_initial_message, shows INSERT COIN" do
+        it "calls #show_total_deposit_or_initial_message, displays INSERT COIN" do
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
           @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "INSERT COIN"
@@ -228,7 +237,7 @@ describe PillarKata::VendingMachine do
       end
 
       context "when no @total_deposit:" do
-        it "shows INSERT COIN" do
+        it "displays INSERT COIN" do
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
           @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "INSERT COIN"
@@ -305,7 +314,7 @@ describe PillarKata::VendingMachine do
       end
 
       context "when no @total_deposit:" do
-        it "shows INSERT COIN" do
+        it "displays INSERT COIN" do
           expect(@vending_machine.total_deposit).to eq 0
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
           @vending_machine.show_total_deposit_or_initial_message
@@ -317,30 +326,23 @@ describe PillarKata::VendingMachine do
 
   context "EXACT CHANGE ONLY" do
     before do
-      @vending_machine.activate_exact_change
-    end
-
-    describe "#activate_exact_change" do
-      it "assigns true to @exact_change_only" do
-        expect(@vending_machine.exact_change_only).to eq true
-      end
-
-      it "shows EXACT CHANGE ONLY" do
-        expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
-      end
+      @vending_machine.send(:safe_box_amount_changes, 0.05)
     end
 
     describe "#show_total_deposit_or_initial_message" do
-      it "shows EXACT CHANGE ONLY" do
-        @vending_machine.show_total_deposit_or_initial_message
-        expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
+      context "when initialized:" do
+        it "displays EXACT CHANGE ONLY" do
+          expect(@vending_machine.total_deposit).to eq 0
+          @vending_machine.show_total_deposit_or_initial_message
+          expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
+        end
       end
     end
 
     describe "#product_button_pressed" do
       context "when product is available, calls #product_available_selected:" do
         context "when @total_deposit is enough:" do
-          it "assigns product.name to @product_dispensed" do
+          it "dispenses product" do
             @vending_machine.product_button_pressed(@cola, 1.00)
             expect(@vending_machine.product_dispensed).to eq "cola"
           end
@@ -354,6 +356,22 @@ describe PillarKata::VendingMachine do
             expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
           end
         end
+
+        context "when @total_deposit is NOT enough:" do
+          it "does NOT dispense product" do
+            @vending_machine.product_button_pressed(@cola, 0.90)
+            expect(@vending_machine.product_dispensed).to be_nil
+          end
+
+          it "shows PRICE 1.00 for cola" do
+            @vending_machine.product_button_pressed(@cola, 0.90)
+            expect(@vending_machine.display).to eq "PRICE 1.00"
+          end
+
+          it "then displays EXACT CHANGE ONLY" do
+            expect(@vending_machine.reset_or_show_total_or_message).to eq "EXACT CHANGE ONLY"
+          end
+        end        
       end
     end
   end
@@ -379,6 +397,10 @@ describe PillarKata::VendingMachine do
         expect(@vending_machine.inventory[:candy]).to eq 1
       end
 
+      it "assigns a default value to @safe_box_amount" do
+        expect(@vending_machine.safe_box_amount).to eq 0.10
+      end
+
       it "assigns false to @exact_change_only" do
         expect(@vending_machine.exact_change_only).to eq false
       end
@@ -390,14 +412,14 @@ describe PillarKata::VendingMachine do
 
     describe "#choose_initial_message", :private do
       context "when @exact_change_only is true:" do
-        it "shows EXACT CHANGE ONLY" do
+        it "displays EXACT CHANGE ONLY" do
           @vending_machine.exact_change_only = true
           expect(@vending_machine.send(:choose_initial_message)).to eq "EXACT CHANGE ONLY"
         end
       end
 
       context "when @exact_change_only is false:" do
-        it "shows INSERT COIN" do
+        it "displays INSERT COIN" do
           expect(@vending_machine.exact_change_only).to eq false
           expect(@vending_machine.send(:choose_initial_message)).to eq "INSERT COIN"
         end
@@ -449,6 +471,34 @@ describe PillarKata::VendingMachine do
         expect(result).to eq 1.25
         expect(result).to be_a Float
       end
+    end
+
+    describe "#safe_box_amount_changes", :private do
+      before do
+        @vending_machine.send(:safe_box_amount_changes, 0.05)
+      end
+
+      it "assigns amount param to @safe_box_amount" do
+        expect(@vending_machine.safe_box_amount).to eq 0.05
+      end
+
+      context "when @safe_box_amount < 0.10" do
+        it "assigns @exact_change_only to true" do
+          expect(@vending_machine.exact_change_only).to eq true
+        end
+      end
+
+      context "when @safe_box_amount >= 0.10" do
+        it "assigns @exact_change_only to false" do
+          @vending_machine.send(:safe_box_amount_changes, 0.10)
+          expect(@vending_machine.exact_change_only).to eq false
+        end
+
+        it "assigns @exact_change_only to false" do
+          @vending_machine.send(:safe_box_amount_changes, 0.25)
+          expect(@vending_machine.exact_change_only).to eq false
+        end
+      end      
     end
   end  
 end
