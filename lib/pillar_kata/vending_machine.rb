@@ -4,7 +4,9 @@ module PillarKata
     attr_accessor :total_deposit, :coin_return, :product_dispensed, 
                   :inventory, :safe_box_amount, :exact_change_only, :display
 
-    def initialize
+    def initialize(inventory, safe_box_amount)
+      @inventory = inventory
+      initialize_helper(safe_box_amount)
       assign_starting_variables
     end
 
@@ -85,10 +87,6 @@ module PillarKata
       @total_deposit = 0
       @coin_return = 0
       @product_dispensed = nil
-      @inventory = { cola: 1, chips: 1, candy: 1 }
-      @safe_box_amount = 0.10
-      @exact_change_only = false
-      @display = choose_initial_message
     end
 
     def choose_initial_message
@@ -107,9 +105,10 @@ module PillarKata
       truncate_decimals_to_two(float).to_f
     end
 
-    def safe_box_amount_changes(amount)
+    def initialize_helper(amount)
       @safe_box_amount = amount
       @safe_box_amount < 0.10 ? @exact_change_only = true : @exact_change_only = false
+      @display = choose_initial_message
     end
   end
 

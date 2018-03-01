@@ -1,6 +1,9 @@
 describe PillarKata::VendingMachine do
   before do
-    @vending_machine = PillarKata::VendingMachine.new
+    inventory = { cola: 1, chips: 1, candy: 1 }
+    safe_box_amount = 0.10
+    @vending_machine = PillarKata::VendingMachine.new(inventory, safe_box_amount)
+    
     @nickel  = { weight: 5.000, diameter: 21.21, value: 0.05 }
     @dime    = { weight: 2.268, diameter: 17.91, value: 0.10 }
     @quarter = { weight: 5.670, diameter: 24.26, value: 0.25 }
@@ -326,7 +329,7 @@ describe PillarKata::VendingMachine do
 
   context "EXACT CHANGE ONLY" do
     before do
-      @vending_machine.send(:safe_box_amount_changes, 0.05)
+      @vending_machine.send(:initialize_helper, 0.05)
     end
 
     describe "#show_total_deposit_or_initial_message" do
@@ -473,9 +476,9 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#safe_box_amount_changes", :private do
+    describe "#initialize_helper", :private do
       before do
-        @vending_machine.send(:safe_box_amount_changes, 0.05)
+        @vending_machine.send(:initialize_helper, 0.05)
       end
 
       it "assigns amount param to @safe_box_amount" do
@@ -490,12 +493,12 @@ describe PillarKata::VendingMachine do
 
       context "when @safe_box_amount >= 0.10" do
         it "assigns @exact_change_only to false" do
-          @vending_machine.send(:safe_box_amount_changes, 0.10)
+          @vending_machine.send(:initialize_helper, 0.10)
           expect(@vending_machine.exact_change_only).to eq false
         end
 
         it "assigns @exact_change_only to false" do
-          @vending_machine.send(:safe_box_amount_changes, 0.25)
+          @vending_machine.send(:initialize_helper, 0.25)
           expect(@vending_machine.exact_change_only).to eq false
         end
       end      
