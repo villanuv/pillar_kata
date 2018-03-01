@@ -15,14 +15,20 @@ describe PillarKata::VendingMachine do
 
   context "When customer approaches the machine" do
     describe "#initialize" do
+      it "assigns inventory param to @inventory" do
+        expect(@vending_machine.inventory).to eq ({ cola: 1, chips: 1, candy: 1 })
+      end
+
+      it "calls #initialize_helper" do
+        expect(@vending_machine.safe_box_amount).to eq 0.10
+        expect(@vending_machine.exact_change_only).to eq false
+        expect(@vending_machine.display).to eq "INSERT COIN"
+      end
+
       it "calls #assign_starting_variables" do
         expect(@vending_machine.total_deposit).to eq 0
         expect(@vending_machine.coin_return).to eq 0
         expect(@vending_machine.product_dispensed).to be_nil
-        expect(@vending_machine.inventory).to be_a Hash
-        expect(@vending_machine.safe_box_amount).to eq 0.10
-        expect(@vending_machine.exact_change_only).to eq false
-        expect(@vending_machine.display).to eq "INSERT COIN"
       end
 
       context "attr_accessor methods" do
@@ -392,25 +398,6 @@ describe PillarKata::VendingMachine do
       it "assigns nil to @product_dispensed" do
         expect(@vending_machine.product_dispensed).to be_nil
       end
-
-      it "assigns a default hash to @inventory" do
-        expect(@vending_machine.inventory).to be_a Hash
-        expect(@vending_machine.inventory[:cola]).to eq 1
-        expect(@vending_machine.inventory[:chips]).to eq 1
-        expect(@vending_machine.inventory[:candy]).to eq 1
-      end
-
-      it "assigns a default value to @safe_box_amount" do
-        expect(@vending_machine.safe_box_amount).to eq 0.10
-      end
-
-      it "assigns false to @exact_change_only" do
-        expect(@vending_machine.exact_change_only).to eq false
-      end
-
-      it "assigns INSERT COIN to @display" do
-        expect(@vending_machine.display).to eq "INSERT COIN"
-      end
     end
 
     describe "#choose_initial_message", :private do
@@ -501,7 +488,11 @@ describe PillarKata::VendingMachine do
           @vending_machine.send(:initialize_helper, 0.25)
           expect(@vending_machine.exact_change_only).to eq false
         end
-      end      
+      end  
+
+      it "assigns @display to #choose_initial_message" do
+        expect(@vending_machine.display).to eq "EXACT CHANGE ONLY"
+      end    
     end
   end  
 end
