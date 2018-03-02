@@ -4,13 +4,14 @@ describe PillarKata::VendingMachine do
     change_in_machine = 0.10
     @vending_machine = PillarKata::VendingMachine.new(inventory, change_in_machine)
     
-    @nickel  = { weight: 5.000, diameter: 21.21, value: 0.05 }
-    @dime    = { weight: 2.268, diameter: 17.91, value: 0.10 }
-    @quarter = { weight: 5.670, diameter: 24.26, value: 0.25 }
-    @penny   = { weight: 2.500, diameter: 19.05, value: 0.01 }
-    @cola    = PillarKata::VendingItem.new("cola", 1.00)
-    @chips   = PillarKata::VendingItem.new("chips", 0.50)
-    @candy   = PillarKata::VendingItem.new("candy", 0.65)
+    @nickel  = PillarKata::NICKEL
+    @dime    = PillarKata::DIME
+    @quarter = PillarKata::QUARTER
+    @penny   = PillarKata::PENNY
+
+    @cola  = PillarKata::VendingItem.new("cola", 1.00)
+    @chips = PillarKata::VendingItem.new("chips", 0.50)
+    @candy = PillarKata::VendingItem.new("candy", 0.65)
   end
 
   context "When customer approaches the machine" do
