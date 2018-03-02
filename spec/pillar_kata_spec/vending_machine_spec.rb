@@ -469,16 +469,16 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#truncate_decimals_to_two", :private do
+    describe "#money_format_as_string", :private do
       it "shortens decimals to 2 digits as a string" do
-        result = @vending_machine.send(:truncate_decimals_to_two, 1.250000001)
+        result = @vending_machine.send(:money_format_as_string, 1.250000001)
         expect(result).to eq "1.25"
         expect(result).to be_a String
       end
     end
 
     describe "#convert_decimalstring_to_float", :private do
-      it "calls #truncate_decimals_to_two and converts into a float" do
+      it "calls #money_format_as_string and converts into a float" do
         result = @vending_machine.send(:convert_decimalstring_to_float, 1.250000001)
         expect(result).to eq 1.25
         expect(result).to be_a Float

@@ -35,7 +35,7 @@ module PillarKata
     def add_coin(weight_in_g, diameter_in_mm)
       coin_value = evaluate_coin_by_weight_and_size(weight_in_g, diameter_in_mm)
       add_to_total_deposit_or_coin_return(coin_value)
-      @display = truncate_decimals_to_two(@total_deposit)
+      @display = money_format_as_string(@total_deposit)
     end
 
     def check_for_change(deposit, product_price)
@@ -49,7 +49,7 @@ module PillarKata
         @change_in_machine = @change_in_machine + amount - @coin_return
         @display = "THANK YOU"
       else
-        @display = "PRICE " + truncate_decimals_to_two(product.price)
+        @display = "PRICE " + money_format_as_string(product.price)
       end
     end
 
@@ -63,7 +63,7 @@ module PillarKata
 
     def show_total_deposit_or_initial_message
       if @total_deposit > 0
-        @display = truncate_decimals_to_two(@total_deposit)
+        @display = money_format_as_string(@total_deposit)
       else
         @display = choose_initial_message
       end
@@ -100,12 +100,12 @@ module PillarKata
       amount >= product.price
     end
 
-    def truncate_decimals_to_two(float)
+    def money_format_as_string(float)
       '%.2f' % float
     end
 
     def convert_decimalstring_to_float(float)
-      truncate_decimals_to_two(float).to_f
+      money_format_as_string(float).to_f
     end
 
     def string_to_symbol(string)
