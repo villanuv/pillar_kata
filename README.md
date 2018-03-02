@@ -1,41 +1,51 @@
-# PillarKata
+# Vending Machine Kata
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pillar_kata`. To experiment with that code, run `bin/console` for an interactive prompt.
+The Vending Machine Kata is part of Pillar Technology's application process for their Apprenticeship Program. It is a Test Driven Development exercise that will:
 
-TODO: Delete this and the text above, and describe your gem
+> build the brains of a vending machine. It will accept money, make change, maintain inventory, and dispense products.
 
-## Installation
+> There are three products: cola for $1.00, chips for $0.50, and candy for $0.65.
 
-Add this line to your application's Gemfile:
+My solution was written in Ruby and created as a gem to simplify the review process for their Artisans. The gem itself was not meant to be published.
+
+I enjoyed this exercise very much, especially in seeing how my code incrementally improved with each step of TDD. 
+
+### Notes
+
+1. To determine a coin's monetary value, I used values from an online resource to create a hash. Weight and diameter are in grams and millimeters, respectively.
+2. The vending machine's #evaluate_coin_by_weight_and_size method was not written to evaluate any other coin outside of a U.S. nickel, dime, quarter or penny. 
+3. The total value in a coin return also accommodates pennies.
+4. The **Select Product** feature will need to combine its methods through a UI or other front end.
+5. For **Exact Change Only**: Products are dispensed if more that enough money is added. In that case, no change will be returned. I determined that a vending machine with only $0.05 in change should trigger @exact_change_only.
+6. In developing the last feature, it was clear that the vending machine's total change could be maintained as well. Refactoring revealed initializing an inventory. I have included these as part of my solution.
+7. RSpec tests have been organized to show associated methods as appropriate and under their respective features.
+
+## To View RSpec Tests
+
+ 1. Clone the repo: `git clone https://github.com/villanuv/pillar_kata`
+ 2. cd into directory
+ 3. Run `bin/setup` to install dependencies. 
+ 4. To run tests: Run `rake spec`
+
+**Optional:** Run `bin/console` to experiment with the gem.
+
+Dependencies installed include: bundler, rake and rspec.
+
+## Console Example
 
 ```ruby
-gem 'pillar_kata'
+# Create vending machine
+cola_count, chips_count, candy_count = 1, 1, 1 
+change_in_machine = 0.10
+@vending_machine = PillarKata::VendingMachine.new(cola_count, chips_count, candy_count, change_in_machine)
+# Call #total_deposit method
+@vending_machine.total_deposit #=> 0
+# Create vending item
+@cola = PillarKata::VendingItem.new("cola", 1.00)
+# Call #name method
+@cola.name #=> "cola"
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install pillar_kata
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/pillar_kata.
-
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
