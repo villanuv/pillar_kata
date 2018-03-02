@@ -459,15 +459,17 @@ describe PillarKata::VendingMachine do
 
       context "when more than enough:" do
         it "returns true for any product" do
-          total_deposit = 1.00
-          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, total_deposit)).to be true
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @cola, 1.05)).to be true
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @chips, 0.55)).to be true
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, 0.70)).to be true
         end
       end
 
       context "when NOT enough:" do
         it "returns false for any product" do
-          total_deposit = 0.50
-          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, total_deposit)).to be false
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @cola, 0.95)).to be false
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @chips, 0.45)).to be false
+          expect(@vending_machine.send(:is_total_deposit_enough_for_product?, @candy, 0.60)).to be false
         end
       end
     end
