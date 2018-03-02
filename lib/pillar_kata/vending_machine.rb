@@ -54,7 +54,7 @@ module PillarKata
     end
 
     def product_button_pressed(product, amount)
-      if @inventory[product.name.to_sym] == 0
+      if @inventory[string_to_symbol(product.name)] == 0
         @display = "SOLD OUT"
       else
         product_available_selected(product, amount)
@@ -71,7 +71,7 @@ module PillarKata
 
     def reset_or_show_total_or_message
       if @product_dispensed != nil
-        @inventory[@product_dispensed.to_sym] -= 1
+        @inventory[string_to_symbol(@product_dispensed)] -= 1
         assign_starting_variables
         initialize_helper(@safe_box_amount)
       else
@@ -106,6 +106,10 @@ module PillarKata
 
     def convert_decimalstring_to_float(float)
       truncate_decimals_to_two(float).to_f
+    end
+
+    def string_to_symbol(string)
+      string.to_sym
     end
 
     def initialize_helper(amount)

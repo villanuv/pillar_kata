@@ -485,6 +485,13 @@ describe PillarKata::VendingMachine do
       end
     end
 
+    describe "#string_to_symbol", :private do
+      it "converts a string into a symbol" do
+        string = @vending_machine.send(:string_to_symbol, "cola")
+        expect(string).to eq :cola
+      end
+    end
+
     describe "#initialize_helper", :private do
       before do
         @vending_machine.send(:initialize_helper, 0.05)
