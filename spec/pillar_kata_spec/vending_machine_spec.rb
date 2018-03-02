@@ -1,8 +1,8 @@
 describe PillarKata::VendingMachine do
   before do
     inventory = { cola: 1, chips: 1, candy: 1 }
-    safe_box_amount = 0.10
-    @vending_machine = PillarKata::VendingMachine.new(inventory, safe_box_amount)
+    change_in_machine = 0.10
+    @vending_machine = PillarKata::VendingMachine.new(inventory, change_in_machine)
     
     @nickel  = { weight: 5.000, diameter: 21.21, value: 0.05 }
     @dime    = { weight: 2.268, diameter: 17.91, value: 0.10 }
@@ -20,7 +20,7 @@ describe PillarKata::VendingMachine do
       end
 
       it "calls #initialize_helper" do
-        expect(@vending_machine.safe_box_amount).to eq 0.10
+        expect(@vending_machine.change_in_machine).to eq 0.10
         expect(@vending_machine.exact_change_only).to eq false
         expect(@vending_machine.display).to eq "INSERT COIN"
       end
@@ -70,11 +70,11 @@ describe PillarKata::VendingMachine do
           end
         end
 
-        describe "#safe_box_amount" do
-          it "gets and sets @safe_box_amount" do
-            expect(@vending_machine.safe_box_amount).to eq 0.10
-            @vending_machine.safe_box_amount = 0.20
-            expect(@vending_machine.safe_box_amount).to eq 0.20
+        describe "#change_in_machine" do
+          it "gets and sets @change_in_machine" do
+            expect(@vending_machine.change_in_machine).to eq 0.10
+            @vending_machine.change_in_machine = 0.20
+            expect(@vending_machine.change_in_machine).to eq 0.20
           end
         end
 
@@ -182,9 +182,9 @@ describe PillarKata::VendingMachine do
             expect(@vending_machine.coin_return).to eq 0.05
           end
 
-          it "updates @safe_box_amount" do
+          it "updates @change_in_machine" do
             @vending_machine.product_button_pressed(@cola, 1.05)
-            expect(@vending_machine.safe_box_amount).to eq 1.10
+            expect(@vending_machine.change_in_machine).to eq 1.10
           end
 
           it "displays THANK YOU" do
@@ -224,10 +224,10 @@ describe PillarKata::VendingMachine do
           expect(@vending_machine.product_dispensed).to be_nil
         end
 
-        it "calls #initialize_helper with @safe_box_amount" do
+        it "calls #initialize_helper with @change_in_machine" do
           @vending_machine.product_button_pressed(@cola, 1.05)
           @vending_machine.reset_or_show_total_or_message
-          expect(@vending_machine.safe_box_amount).to eq 1.10
+          expect(@vending_machine.change_in_machine).to eq 1.10
           expect(@vending_machine.exact_change_only).to eq false
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
@@ -497,17 +497,17 @@ describe PillarKata::VendingMachine do
         @vending_machine.send(:initialize_helper, 0.05)
       end
 
-      it "assigns amount param to @safe_box_amount" do
-        expect(@vending_machine.safe_box_amount).to eq 0.05
+      it "assigns amount param to @change_in_machine" do
+        expect(@vending_machine.change_in_machine).to eq 0.05
       end
 
-      context "when @safe_box_amount < 0.10" do
+      context "when @change_in_machine < 0.10" do
         it "assigns @exact_change_only to true" do
           expect(@vending_machine.exact_change_only).to eq true
         end
       end
 
-      context "when @safe_box_amount >= 0.10" do
+      context "when @change_in_machine >= 0.10" do
         it "assigns @exact_change_only to false" do
           @vending_machine.send(:initialize_helper, 0.10)
           expect(@vending_machine.exact_change_only).to eq false

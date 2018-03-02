@@ -2,11 +2,11 @@ module PillarKata
   
   class VendingMachine
     attr_accessor :total_deposit, :coin_return, :product_dispensed, 
-                  :inventory, :safe_box_amount, :exact_change_only, :display
+                  :inventory, :change_in_machine, :exact_change_only, :display
 
-    def initialize(inventory, safe_box_amount)
+    def initialize(inventory, change_in_machine)
       @inventory = inventory
-      initialize_helper(safe_box_amount)
+      initialize_helper(change_in_machine)
       assign_starting_variables
     end
 
@@ -46,7 +46,7 @@ module PillarKata
       if is_total_deposit_enough_for_product?(product, amount)
         @product_dispensed = product.name
         check_for_change(amount, product.price) unless @exact_change_only
-        @safe_box_amount = @safe_box_amount + amount - @coin_return
+        @change_in_machine = @change_in_machine + amount - @coin_return
         @display = "THANK YOU"
       else
         @display = "PRICE " + truncate_decimals_to_two(product.price)
@@ -73,7 +73,7 @@ module PillarKata
       if @product_dispensed != nil
         @inventory[string_to_symbol(@product_dispensed)] -= 1
         assign_starting_variables
-        initialize_helper(@safe_box_amount)
+        initialize_helper(@change_in_machine)
       else
         show_total_deposit_or_initial_message
       end
@@ -113,8 +113,8 @@ module PillarKata
     end
 
     def initialize_helper(amount)
-      @safe_box_amount = amount
-      @safe_box_amount < 0.10 ? @exact_change_only = true : @exact_change_only = false
+      @change_in_machine = amount
+      @change_in_machine < 0.10 ? @exact_change_only = true : @exact_change_only = false
       @display = choose_initial_message
     end
   end
