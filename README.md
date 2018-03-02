@@ -13,10 +13,10 @@ I enjoyed this exercise very much, especially in seeing how my code incrementall
 ### Notes
 
 1. To determine a coin's monetary value, I used values from an online resource to create a hash. Weight and diameter are in grams and millimeters, respectively.
-2. The vending machine's #evaluate_coin_by_weight_and_size method was not written to evaluate any other coin outside of a U.S. nickel, dime, quarter or penny. 
+2. The vending machine's #*evaluate_coin_by_weight_and_size* method was not written to evaluate any other coin outside of a U.S. nickel, dime, quarter or penny. 
 3. The total value in a coin return also accommodates pennies.
-4. The **Select Product** feature will need to combine its methods through a UI or other front end.
-5. For **Exact Change Only**: Products are dispensed if more that enough money is added. In that case, no change will be returned. I determined that a vending machine with only $0.05 in change should trigger @exact_change_only.
+4. The **Select Product** feature will need to combine its main methods called (#*product_button_pressed* and #*reset_or_show_total_or_message*) through a UI or other front end.
+5. For **Exact Change Only**: Products are dispensed if more than enough money is added. In that case, no change will be returned. I determined that a vending machine with only $0.05 in change should trigger @exact_change_only.
 6. In developing the last feature, it was clear that the vending machine's total change could be maintained as well. Refactoring revealed initializing an inventory. I have included these as part of my solution.
 7. RSpec tests have been organized to show associated methods as appropriate and under their respective features.
 
