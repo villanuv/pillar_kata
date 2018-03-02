@@ -16,87 +16,85 @@ describe PillarKata::VendingMachine do
     @candy = PillarKata::VendingItem.new("candy", 0.65)
   end
 
-  context "When customer approaches the machine" do
-    describe "#initialize" do
-      it "assigns inventory param to @inventory" do
-        expect(@vending_machine.inventory).to eq ({ cola: 1, chips: 1, candy: 1 })
-      end
-
-      it "calls #initialize_helper" do
-        expect(@vending_machine.change_in_machine).to eq 0.10
-        expect(@vending_machine.exact_change_only).to eq false
-        expect(@vending_machine.display).to eq "INSERT COIN"
-      end
-
-      it "calls #assign_starting_variables" do
+  context "attr_accessor methods" do
+    describe "#total_deposit" do
+      it "gets and sets @total_deposit" do
         expect(@vending_machine.total_deposit).to eq 0
+        @vending_machine.total_deposit = 1
+        expect(@vending_machine.total_deposit).to eq 1
+      end
+    end
+
+    describe "#coin_return" do
+      it "gets and sets @coin_return" do
         expect(@vending_machine.coin_return).to eq 0
+        @vending_machine.coin_return = 0.01
+        expect(@vending_machine.coin_return).to eq 0.01
+      end
+    end
+
+    describe "#product_dispensed" do
+      it "gets and sets @product_dispensed" do
         expect(@vending_machine.product_dispensed).to be_nil
+        @vending_machine.product_dispensed = "cola"
+        expect(@vending_machine.product_dispensed).to eq "cola"
       end
+    end
 
-      context "attr_accessor methods" do
-        describe "#total_deposit" do
-          it "gets and sets @total_deposit" do
-            expect(@vending_machine.total_deposit).to eq 0
-            @vending_machine.total_deposit = 1
-            expect(@vending_machine.total_deposit).to eq 1
-          end
-        end
-
-        describe "#coin_return" do
-          it "gets and sets @coin_return" do
-            expect(@vending_machine.coin_return).to eq 0
-            @vending_machine.coin_return = 0.01
-            expect(@vending_machine.coin_return).to eq 0.01
-          end
-        end
-
-        describe "#product_dispensed" do
-          it "gets and sets @product_dispensed" do
-            expect(@vending_machine.product_dispensed).to be_nil
-            @vending_machine.product_dispensed = "cola"
-            expect(@vending_machine.product_dispensed).to eq "cola"
-          end
-        end
-
-        describe "#inventory" do
-          it "gets and sets @inventory" do
-            expect(@vending_machine.inventory[:cola]).to eq 1
-            expect(@vending_machine.inventory[:chips]).to eq 1
-            expect(@vending_machine.inventory[:candy]).to eq 1
-            @vending_machine.inventory[:cola] = 0
-            @vending_machine.inventory[:chips] = 0
-            @vending_machine.inventory[:candy] = 0
-            expect(@vending_machine.inventory[:cola]).to eq 0
-            expect(@vending_machine.inventory[:chips]).to eq 0
-            expect(@vending_machine.inventory[:candy]).to eq 0
-          end
-        end
-
-        describe "#change_in_machine" do
-          it "gets and sets @change_in_machine" do
-            expect(@vending_machine.change_in_machine).to eq 0.10
-            @vending_machine.change_in_machine = 0.20
-            expect(@vending_machine.change_in_machine).to eq 0.20
-          end
-        end
-
-        describe "#exact_change_only" do
-          it "gets and sets @exact_change_only" do
-            expect(@vending_machine.exact_change_only).to eq false
-            @vending_machine.exact_change_only = true
-            expect(@vending_machine.exact_change_only).to eq true
-          end
-        end        
-
-        describe "#display" do
-          it "gets and sets @display" do
-            expect(@vending_machine.display).to eq "INSERT COIN"
-            @vending_machine.display = "THANK YOU"
-            expect(@vending_machine.display).to eq "THANK YOU"
-          end
-        end
+    describe "#inventory" do
+      it "gets and sets @inventory" do
+        expect(@vending_machine.inventory[:cola]).to eq 1
+        expect(@vending_machine.inventory[:chips]).to eq 1
+        expect(@vending_machine.inventory[:candy]).to eq 1
+        @vending_machine.inventory[:cola] = 0
+        @vending_machine.inventory[:chips] = 0
+        @vending_machine.inventory[:candy] = 0
+        expect(@vending_machine.inventory[:cola]).to eq 0
+        expect(@vending_machine.inventory[:chips]).to eq 0
+        expect(@vending_machine.inventory[:candy]).to eq 0
       end
+    end
+
+    describe "#change_in_machine" do
+      it "gets and sets @change_in_machine" do
+        expect(@vending_machine.change_in_machine).to eq 0.10
+        @vending_machine.change_in_machine = 0.20
+        expect(@vending_machine.change_in_machine).to eq 0.20
+      end
+    end
+
+    describe "#exact_change_only" do
+      it "gets and sets @exact_change_only" do
+        expect(@vending_machine.exact_change_only).to eq false
+        @vending_machine.exact_change_only = true
+        expect(@vending_machine.exact_change_only).to eq true
+      end
+    end        
+
+    describe "#display" do
+      it "gets and sets @display" do
+        expect(@vending_machine.display).to eq "INSERT COIN"
+        @vending_machine.display = "THANK YOU"
+        expect(@vending_machine.display).to eq "THANK YOU"
+      end
+    end
+  end
+
+  describe "#initialize" do
+    it "assigns inventory param to @inventory" do
+      expect(@vending_machine.inventory).to eq ({ cola: 1, chips: 1, candy: 1 })
+    end
+
+    it "calls #initialize_helper" do
+      expect(@vending_machine.change_in_machine).to eq 0.10
+      expect(@vending_machine.exact_change_only).to eq false
+      expect(@vending_machine.display).to eq "INSERT COIN"
+    end
+
+    it "calls #assign_starting_variables" do
+      expect(@vending_machine.total_deposit).to eq 0
+      expect(@vending_machine.coin_return).to eq 0
+      expect(@vending_machine.product_dispensed).to be_nil
     end
   end
 
@@ -513,12 +511,12 @@ describe PillarKata::VendingMachine do
       end
 
       context "when @change_in_machine >= 0.10" do
-        it "assigns @exact_change_only to false" do
+        it "assigns @exact_change_only to false (with 0.10)" do
           @vending_machine.send(:initialize_helper, 0.10)
           expect(@vending_machine.exact_change_only).to eq false
         end
 
-        it "assigns @exact_change_only to false" do
+        it "assigns @exact_change_only to false (with 0.25)" do
           @vending_machine.send(:initialize_helper, 0.25)
           expect(@vending_machine.exact_change_only).to eq false
         end
