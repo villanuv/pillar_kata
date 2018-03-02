@@ -1,8 +1,10 @@
 describe PillarKata::VendingMachine do
   before do
-    inventory = { cola: 1, chips: 1, candy: 1 }
+    cola_count  = 1
+    chips_count = 1
+    candy_count = 1
     change_in_machine = 0.10
-    @vending_machine = PillarKata::VendingMachine.new(inventory, change_in_machine)
+    @vending_machine = PillarKata::VendingMachine.new(cola_count, chips_count, candy_count, change_in_machine)
     
     @nickel  = PillarKata::NICKEL
     @dime    = PillarKata::DIME

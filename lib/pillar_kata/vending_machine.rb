@@ -4,8 +4,8 @@ module PillarKata
     attr_accessor :total_deposit, :coin_return, :product_dispensed, 
                   :inventory, :change_in_machine, :exact_change_only, :display
 
-    def initialize(inventory, change_in_machine)
-      @inventory = inventory
+    def initialize(cola_count, chips_count, candy_count, change_in_machine)
+      @inventory = { cola: cola_count, chips: chips_count, candy: candy_count }
       initialize_helper(change_in_machine)
       assign_starting_variables
     end
