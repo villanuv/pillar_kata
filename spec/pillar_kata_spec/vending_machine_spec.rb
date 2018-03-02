@@ -477,9 +477,9 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#convert_decimalstring_to_float", :private do
+    describe "#truncate_decimal", :private do
       it "calls #money_format_as_string and converts into a float" do
-        result = @vending_machine.send(:convert_decimalstring_to_float, 1.250000001)
+        result = @vending_machine.send(:truncate_decimal, 1.250000001)
         expect(result).to eq 1.25
         expect(result).to be_a Float
       end

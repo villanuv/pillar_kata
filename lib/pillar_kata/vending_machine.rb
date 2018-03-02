@@ -27,7 +27,7 @@ module PillarKata
         @coin_return += value
       else
         unrounded_total_deposit = @total_deposit + value
-        @total_deposit = convert_decimalstring_to_float(unrounded_total_deposit)
+        @total_deposit = truncate_decimal(unrounded_total_deposit)
         @display = "#{@total_deposit}"
       end
     end
@@ -39,7 +39,7 @@ module PillarKata
     end
 
     def check_for_change(deposit, product_price)
-      @coin_return = convert_decimalstring_to_float(deposit - product_price)
+      @coin_return = truncate_decimal(deposit - product_price)
     end
 
     def product_available_selected(product, amount)
@@ -80,7 +80,7 @@ module PillarKata
     end
 
     def return_button_pressed      
-      @coin_return = convert_decimalstring_to_float(@coin_return += @total_deposit)
+      @coin_return = truncate_decimal(@coin_return += @total_deposit)
     end
 
 
@@ -104,7 +104,7 @@ module PillarKata
       '%.2f' % float
     end
 
-    def convert_decimalstring_to_float(float)
+    def truncate_decimal(float)
       money_format_as_string(float).to_f
     end
 
