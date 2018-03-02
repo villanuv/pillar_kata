@@ -46,6 +46,7 @@ module PillarKata
       if is_total_deposit_enough_for_product?(product, amount)
         @product_dispensed = product.name
         check_for_change(amount, product.price) unless @exact_change_only
+        @safe_box_amount = @safe_box_amount + amount - @coin_return
         @display = "THANK YOU"
       else
         @display = "PRICE " + truncate_decimals_to_two(product.price)
@@ -70,7 +71,9 @@ module PillarKata
 
     def reset_or_show_total_or_message
       if @product_dispensed != nil
+        @inventory[@product_dispensed.to_sym] -= 1
         assign_starting_variables
+        initialize_helper(@safe_box_amount)
       else
         show_total_deposit_or_initial_message
       end

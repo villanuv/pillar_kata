@@ -74,7 +74,7 @@ describe PillarKata::VendingMachine do
           it "gets and sets @safe_box_amount" do
             expect(@vending_machine.safe_box_amount).to eq 0.10
             @vending_machine.safe_box_amount = 0.20
-          expect(@vending_machine.safe_box_amount).to eq 0.20
+            expect(@vending_machine.safe_box_amount).to eq 0.20
           end
         end
 
@@ -182,6 +182,11 @@ describe PillarKata::VendingMachine do
             expect(@vending_machine.coin_return).to eq 0.05
           end
 
+          it "updates @safe_box_amount" do
+            @vending_machine.product_button_pressed(@cola, 1.05)
+            expect(@vending_machine.safe_box_amount).to eq 1.10
+          end
+
           it "displays THANK YOU" do
             expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
           end
@@ -205,13 +210,24 @@ describe PillarKata::VendingMachine do
 
     describe "#reset_or_show_total_or_message" do
       context "when @product_dispensed:" do
+        it "updates @inventory" do
+          @vending_machine.product_dispensed = "chips"
+          @vending_machine.reset_or_show_total_or_message
+          expect(@vending_machine.inventory).to eq ({ cola: 1, chips: 0, candy: 1 })
+        end
+
         it "calls #assign_starting_variables, resets machine" do
           @vending_machine.product_dispensed = "chips"
           @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.total_deposit).to eq 0
           expect(@vending_machine.coin_return).to eq 0
           expect(@vending_machine.product_dispensed).to be_nil
-          expect(@vending_machine.inventory).to be_a Hash
+        end
+
+        it "calls #initialize_helper with @safe_box_amount" do
+          @vending_machine.product_button_pressed(@cola, 1.05)
+          @vending_machine.reset_or_show_total_or_message
+          expect(@vending_machine.safe_box_amount).to eq 1.10
           expect(@vending_machine.exact_change_only).to eq false
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
@@ -228,6 +244,7 @@ describe PillarKata::VendingMachine do
 
       context "when no @total_deposit:" do
         it "calls #show_total_deposit_or_initial_message, displays INSERT COIN" do
+          expect(@vending_machine.total_deposit).to eq 0
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
           @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "INSERT COIN"
@@ -247,6 +264,7 @@ describe PillarKata::VendingMachine do
 
       context "when no @total_deposit:" do
         it "displays INSERT COIN" do
+          expect(@vending_machine.total_deposit).to eq 0
           @vending_machine.product_button_pressed(@candy, @vending_machine.total_deposit)
           @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.display).to eq "INSERT COIN"
@@ -308,6 +326,7 @@ describe PillarKata::VendingMachine do
         it "shows @total_deposit" do
           4.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
+          expect(@vending_machine.display).to eq "SOLD OUT"
           @vending_machine.show_total_deposit_or_initial_message
           expect(@vending_machine.display).to eq "1.00"
         end
@@ -317,6 +336,7 @@ describe PillarKata::VendingMachine do
         it "shows @total_deposit" do
           3.times { @vending_machine.add_coin(@quarter[:weight], @quarter[:diameter]) }
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
+          expect(@vending_machine.display).to eq "SOLD OUT"
           @vending_machine.show_total_deposit_or_initial_message
           expect(@vending_machine.display).to eq "0.75"
         end
@@ -326,6 +346,7 @@ describe PillarKata::VendingMachine do
         it "displays INSERT COIN" do
           expect(@vending_machine.total_deposit).to eq 0
           @vending_machine.product_button_pressed(@cola, @vending_machine.total_deposit)
+          expect(@vending_machine.display).to eq "SOLD OUT"
           @vending_machine.show_total_deposit_or_initial_message
           expect(@vending_machine.display).to eq "INSERT COIN"
         end
@@ -362,7 +383,8 @@ describe PillarKata::VendingMachine do
           end
 
           it "displays THANK YOU" do
-            expect(@vending_machine.product_button_pressed(@cola, 1.00)).to eq "THANK YOU"
+            @vending_machine.product_button_pressed(@cola, 1.00)
+            expect(@vending_machine.display).to eq "THANK YOU"
           end
         end
 
