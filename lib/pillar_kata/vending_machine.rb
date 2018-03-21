@@ -92,6 +92,10 @@ module PillarKata
       @exact_change_only ? "EXACT CHANGE ONLY" : "INSERT COIN"
     end
 
+    def check_for_exact_change_only(change)
+      change < 0.10 ? @exact_change_only = true : @exact_change_only = false
+    end
+
     def is_total_deposit_enough_for_product?(product, amount)
       amount >= product.price
     end
@@ -110,7 +114,7 @@ module PillarKata
 
     def initialize_helper(amount)
       @change_in_machine = amount
-      @change_in_machine < 0.10 ? @exact_change_only = true : @exact_change_only = false
+      check_for_exact_change_only(amount)
       @display = choose_initial_message
     end
   end

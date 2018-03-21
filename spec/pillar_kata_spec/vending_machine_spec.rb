@@ -373,6 +373,20 @@ describe PillarKata::VendingMachine do
       end
     end
 
+    describe "#check_for_exact_change_only", :private do
+      it "assigns @exact_change_only to true" do
+        change = 0.05
+        @vending_machine.send(:check_for_exact_change_only, change)
+        expect(@vending_machine.exact_change_only).to eq true
+      end
+
+      it "assigns @exact_change_only to false" do
+        change = 0.10
+        @vending_machine.send(:check_for_exact_change_only, change)
+        expect(@vending_machine.exact_change_only).to eq false
+      end
+    end
+
     describe "#is_total_deposit_enough_for_product?", :private do
       it "returns true for cola with 1.00" do
         total_deposit = 1.00
