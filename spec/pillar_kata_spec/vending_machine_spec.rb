@@ -117,7 +117,7 @@ describe PillarKata::VendingMachine do
             expect(@vending_machine.coin_return).to eq 0.05
           end
 
-          it "updates @change_in_machine" do
+          it "updates @change_in_machine, calls #updates_change" do
             @vending_machine.product_button_pressed(@cola, 1.05)
             expect(@vending_machine.change_in_machine).to eq 1.10
           end

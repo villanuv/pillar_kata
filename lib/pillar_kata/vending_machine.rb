@@ -38,11 +38,15 @@ module PillarKata
       @coin_return = truncate_decimal(deposit - product_price)
     end
 
+    def updates_change(amount)
+      @change_in_machine = @change_in_machine + amount - @coin_return
+    end
+
     def product_available_selected(product, amount)
       if is_total_deposit_enough_for_product?(product, amount)
         @product_dispensed = product.name
         check_for_change(amount, product.price) unless @exact_change_only
-        @change_in_machine = @change_in_machine + amount - @coin_return
+        updates_change(amount)
         @display = "THANK YOU"
       else
         @display = "PRICE " + money_format_as_string(product.price)
