@@ -6,7 +6,7 @@ module PillarKata
 
     def initialize(cola_count, chips_count, candy_count, change_in_machine)
       @inventory = { cola: cola_count, chips: chips_count, candy: candy_count }
-      initialize_helper(change_in_machine)
+      change_helper(change_in_machine)
       assign_starting_variables
     end
 
@@ -73,7 +73,7 @@ module PillarKata
       if @product_dispensed != nil
         @inventory[string_to_symbol(@product_dispensed)] -= 1
         assign_starting_variables
-        initialize_helper(@change_in_machine)
+        change_helper(@change_in_machine)
       else
         show_total_deposit_or_initial_message
       end
@@ -116,7 +116,7 @@ module PillarKata
       string.to_sym
     end
 
-    def initialize_helper(amount)
+    def change_helper(amount)
       @change_in_machine = amount
       check_for_exact_change_only(amount)
       @display = choose_initial_message

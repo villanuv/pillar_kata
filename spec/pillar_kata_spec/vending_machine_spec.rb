@@ -19,7 +19,7 @@ describe PillarKata::VendingMachine do
       expect(@vending_machine.inventory).to eq ({ cola: 1, chips: 1, candy: 1 })
     end
 
-    it "calls #initialize_helper" do
+    it "calls #change_helper" do
       expect(@vending_machine.change_in_machine).to eq 0.10
       expect(@vending_machine.exact_change_only).to eq false
       expect(@vending_machine.display).to eq "INSERT COIN"
@@ -159,7 +159,7 @@ describe PillarKata::VendingMachine do
           expect(@vending_machine.product_dispensed).to be_nil
         end
 
-        it "calls #initialize_helper with @change_in_machine" do
+        it "calls #change_helper with @change_in_machine" do
           @vending_machine.product_button_pressed(@cola, 1.05)
           @vending_machine.reset_or_show_total_or_message
           expect(@vending_machine.change_in_machine).to eq 1.10
@@ -291,7 +291,7 @@ describe PillarKata::VendingMachine do
 
   context "EXACT CHANGE ONLY" do
     before do
-      @vending_machine.send(:initialize_helper, 0.05)
+      @vending_machine.send(:change_helper, 0.05)
     end
 
     describe "#show_total_deposit_or_initial_message" do
@@ -443,9 +443,9 @@ describe PillarKata::VendingMachine do
       end
     end
 
-    describe "#initialize_helper", :private do
+    describe "#change_helper", :private do
       before do
-        @vending_machine.send(:initialize_helper, 0.05)
+        @vending_machine.send(:change_helper, 0.05)
       end
 
       it "assigns amount param to @change_in_machine" do
@@ -460,12 +460,12 @@ describe PillarKata::VendingMachine do
 
       context "when @change_in_machine >= 0.10" do
         it "assigns @exact_change_only to false (with 0.10)" do
-          @vending_machine.send(:initialize_helper, 0.10)
+          @vending_machine.send(:change_helper, 0.10)
           expect(@vending_machine.exact_change_only).to eq false
         end
 
         it "assigns @exact_change_only to false (with 0.25)" do
-          @vending_machine.send(:initialize_helper, 0.25)
+          @vending_machine.send(:change_helper, 0.25)
           expect(@vending_machine.exact_change_only).to eq false
         end
       end  
